@@ -348,7 +348,7 @@ namespace BidaSius
             int zapasSize = 5; //zapas z jakim ma wykrywać przestrzeline - to wywalić do jakiegoś txtbox czy coś
             int czteryIpolmmR_int = Convert.ToInt32(FourNHalfR(pix));
 
-            Mat klon_oryg = frame.Clone();
+         
             Mat circleImage = frame;
 
             #region hocki klocki przepierdalanie obrazu
@@ -610,6 +610,60 @@ namespace BidaSius
         }
 
         #endregion
+
+        public static ProcessFrameResult ManualProcessFrame(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
+        {
+            PointF[] srcVertices;
+         //   ProcessFrameResult result = new ProcessFrameResult();
+           // result.Target = new TargetDetails();
+            int kwadratWidth;
+
+            srcVertices = useThisTarget.TargetRect;
+            if (srcVertices == null)
+            {
+                return null;
+            }
+            kwadratWidth = Convert.ToInt32(srcVertices[2].X - srcVertices[3].X);
+
+
+            //FuseThisTarget(frame, srcVertices, kwadratWidth, result, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
+
+            #region wyznaczenie prostokatow i kwadratow do transformacji perspektywy
+
+            PointF[] dstVertices = new PointF[] {
+                 new PointF(0,0),//tl topleft
+                 new PointF(kwadratWidth, 0),//tr
+                 new PointF(kwadratWidth, kwadratWidth),//br
+                 new PointF(0, kwadratWidth)};//bl
+
+            //kwadrat z lewym dolnym rogiem w tym samym miejscu co znaleziony - tylko po to żeby zobrazować
+            //PointF[] dst_vertices_kwadrat_lewydol = new PointF[] {
+            //     new PointF(bo_ord[3].X , bo_ord[3].Y - kwadratWidth),
+            //     new PointF(bo_ord[3].X + kwadratWidth, bo_ord[3].Y - kwadratWidth),
+            //     new PointF(bo_ord[3].X + kwadratWidth, bo_ord[3].Y),
+            //     bo_ord[3]};
+
+            //pokaż wszystko na oryginalnym obrazku 
+         //   Mat klodn = frame.Clone();
+          //  CvInvoke.Polylines(klodn, Array.ConvertAll(srcVertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
+           // result.TargetMarked = klodn;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
+
+            #region tranformacja perspektywy
+            Mat warpMatrix = CvInvoke.GetPerspectiveTransform(srcVertices, dstVertices);
+            Mat warped = new Mat();
+            Size size = new Size(kwadratWidth, kwadratWidth);
+            CvInvoke.WarpPerspective(frame, warped, warpMatrix, size, Inter.Linear, Warp.Default);
+           // result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            #endregion tranformacja perspektywy
+
+
+           return  ProcessFromFile(warped, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
+
+
+}
+
+
 
     }
 }

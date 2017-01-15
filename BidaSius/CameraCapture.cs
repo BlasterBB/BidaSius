@@ -30,6 +30,8 @@ namespace tarcza
         public TargetDetails useThisTarget { get { return _useThisTarget; } set { _useThisTarget = value; } }
         bool captureRectFlag = false;
         public int pauseTimer = 0;
+        public bool useManualShotPositiong = false;
+        public bool alreadyManual = false;
 
         #endregion
 
@@ -63,13 +65,13 @@ namespace tarcza
             int threshtwo1 = 0;
 
 
-
             if (this.trackThreshOne.InvokeRequired)
             {
                 threshOne = (int)this.Invoke(new Func<int>(() => trackThreshOne.Value));
                 threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
                 threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
                 threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
+
             }
             else
             {
@@ -79,13 +81,18 @@ namespace tarcza
                 threshtwo1 = trackthresh4.Value;
             }
 
+            ProcessFrameResult result;
+            if (!useManualShotPositiong)
+                result = CaptureHelper.ProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+            else if (useManualShotPositiong && !alreadyManual)
+            {
+                alreadyManual = true;
+                result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+            }
+            else
+                return;
 
-
-            var result = CaptureHelper.ProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
-     //       if(result == null)
-               
             UstawRezultat(result);
-
         }
 
         private void ProcessFromFile()
@@ -213,7 +220,7 @@ namespace tarcza
                 td.TargetRect[1] = new PointF(975, 39);
                 td.TargetRect[2] = new PointF(1038, 675);
                 td.TargetRect[3] = new PointF(283, 671);
-               
+
             }
             else
             {
@@ -223,7 +230,7 @@ namespace tarcza
             SaveSettings(td);
             useThisTarget = td;
             FillSettingsToGui(td);
-            
+
         }
 
         private void FillSettingsToGui(TargetDetails td)
@@ -315,6 +322,9 @@ namespace tarcza
                 if (result.Shot != null)
                 {
                     var lastshot = mf.Shots.LastOrDefault();
+                    alreadyManual = false;
+                    useManualShotPositiong = false;
+                    buttonPauseAndSelect.Enabled = true;
                     if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
                         return;
                     mf.Shots.Add(result.Shot);
@@ -324,7 +334,9 @@ namespace tarcza
                     //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
                     ScrollPaper();
                     mf.RefreshTarget();
+                   
                 }
+             
 
             }
         }
@@ -419,7 +431,8 @@ namespace tarcza
 
         private void buttonPauseAndSelect_Click(object sender, EventArgs e)
         {
-
+            useManualShotPositiong = true;
+            buttonPauseAndSelect.Enabled = false;
         }
 
         #endregion
