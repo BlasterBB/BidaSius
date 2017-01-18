@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using tarcza;
 
 namespace BidaSius
 {
@@ -16,7 +17,7 @@ namespace BidaSius
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new CameraCapture());
         }
     }
 }

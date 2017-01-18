@@ -319,7 +319,7 @@ namespace tarcza
                 MainForm mf = (MainForm)MainF;
 
 
-                if (result.Shot != null)
+                if (mf!= null && result.Shot != null)
                 {
                     var lastshot = mf.Shots.LastOrDefault();
                     alreadyManual = false;
