@@ -154,7 +154,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn noDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn singleValueDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn valueDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn timeDataGridViewTextBoxColumn;
+       
         private Emgu.CV.UI.ImageBox imageBox1;
     }
 }

@@ -52,47 +52,56 @@ namespace tarcza
 
         private void ProcessFrame(object sender, EventArgs arg)
         {
-            Mat frame = new Mat();
-            _capture.Retrieve(frame);
-
-
-
-            //   imageBox4.Image = frame;//preview
-
-            int threshOne = 0;
-            int threstwo = 0;
-            int threshone1 = 0;
-            int threshtwo1 = 0;
-
-
-            if (this.trackThreshOne.InvokeRequired)
+            using (Mat frame = new Mat())
             {
-                threshOne = (int)this.Invoke(new Func<int>(() => trackThreshOne.Value));
-                threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
-                threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
-                threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
+                _capture.Retrieve(frame);
 
-            }
-            else
-            {
-                threshOne = trackThreshOne.Value;
-                threstwo = trackthreshTwo.Value;
-                threshone1 = trackthresh3.Value;
-                threshtwo1 = trackthresh4.Value;
-            }
 
-            ProcessFrameResult result;
-            if (!useManualShotPositiong)
-                result = CaptureHelper.ProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
-            else if (useManualShotPositiong && !alreadyManual)
-            {
-                alreadyManual = true;
-                result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
-            }
-            else
-                return;
 
-            UstawRezultat(result);
+                //   imageBox4.Image = frame;//preview
+
+                int threshOne = 0;
+                int threstwo = 0;
+                int threshone1 = 0;
+                int threshtwo1 = 0;
+
+
+                if (this.trackThreshOne.InvokeRequired)
+                {
+                    threshOne = (int)this.Invoke(new Func<int>(() => trackThreshOne.Value));
+                    threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
+                    threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
+                    threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
+
+                }
+                else
+                {
+                    threshOne = trackThreshOne.Value;
+                    threstwo = trackthreshTwo.Value;
+                    threshone1 = trackthresh3.Value;
+                    threshtwo1 = trackthresh4.Value;
+                }
+
+                ProcessFrameResult result ;
+                if (!useManualShotPositiong)
+                {
+                   
+                        result = CaptureHelper.ProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+                        UstawRezultat(result);
+                  //  result.Dispose();
+
+                }
+                //else if (useManualShotPositiong && !alreadyManual)
+                //{
+                //    alreadyManual = true;
+                //    result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1,
+                //        useThisTarget);
+                //}
+                //else
+                //    return;
+
+               // UstawRezultat(result);
+            }
         }
 
         private void ProcessFromFile()
@@ -287,6 +296,7 @@ namespace tarcza
             }
         }
 
+       
         private void UstawRezultat(ProcessFrameResult result)
         {
             // InvokeRequired required compares the thread ID of the
@@ -304,22 +314,31 @@ namespace tarcza
                     FillSettingsToGui(result.Target);
                 }
 
-                captureImageBox.Image = result.Oryginal;
-                grayscaleImageBox.Image = result.SmoothedOryginal;
-                cannyImageBox.Image = result.SmOryCanny;
-                smoothedGrayscaleImageBox.Image = result.FoundKontur;
-
+                //captureImageBox.Image = result.Oryginal;
+                //grayscaleImageBox.Image = result.SmoothedOryginal;
+                //cannyImageBox.Image = result.SmOryCanny;
+                //smoothedGrayscaleImageBox.Image = result.FoundKontur;
+                // testPB.Image = result.TargetMarked.ToImage<>()
                 imageBox1.Image = result.TargetMarked;
-                imageBox2.Image = result.Warped;
-                imageBox3.Image = result.WarpedTargetCanny;
-                imageBox4.Image = result.TargetScanWithResult;
+                // imageBox1.SetZoomScale(0.4, new Point(0,0));
+                // sd = result.TargetMarked.Clone().Bitmap;
+               // sd = result.TargetMarked.Clone().Bitmap;
+              
+              
+
+               // System.GC.Collect();
+                  // imageBox1.Refresh();
+                  //      result.TargetMarked.Dispose();
+                 //   imageBox2.Image = result.Warped;
+                //   imageBox3.Image = result.WarpedTargetCanny;
+                  imageBox4.Image = result.TargetScanWithResult;
 
 
 
                 MainForm mf = (MainForm)MainF;
 
 
-                if (mf!= null && result.Shot != null)
+                if (mf != null && result.Shot != null)
                 {
                     var lastshot = mf.Shots.LastOrDefault();
                     alreadyManual = false;
@@ -334,9 +353,9 @@ namespace tarcza
                     //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
                     ScrollPaper();
                     mf.RefreshTarget();
-                   
+
                 }
-             
+
 
             }
         }

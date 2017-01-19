@@ -7,7 +7,7 @@ using Emgu.CV.Structure;
 
 namespace BidaSius
 {
-    public class ProcessFrameResult
+    public class ProcessFrameResult : IDisposable
     {
         public Shot Shot { get; set; }
         public Mat Oryginal { get; set; }
@@ -21,6 +21,18 @@ namespace BidaSius
         public Mat TargetScanWithResult { get; set; }
         public TargetDetails Target { get; set; }
 
+        public void Dispose()
+        {
+            Oryginal?.Dispose();
+            SmoothedOryginal?.Dispose();
+            SmOryCanny?.Dispose();
+            FoundKontur?.Dispose();
+            TargetMarked?.Dispose();
+            Warped?.Dispose();
+            GrSmootWarped?.Dispose();
+            WarpedTargetCanny?.Dispose();
+            TargetScanWithResult?.Dispose();
+        }
     }
 
     [Serializable]
@@ -85,7 +97,9 @@ namespace BidaSius
                 return null;
             }
             kwadratWidth = Convert.ToInt32(srcVertices[2].X - srcVertices[3].X);
+
             FuseThisTarget(frame, srcVertices, kwadratWidth, result, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
+
             return result;
 
 
@@ -93,6 +107,8 @@ namespace BidaSius
 
         private static void FuseThisTarget(Mat frame, PointF[] src_vertices, int kwadratWidth, ProcessFrameResult result, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThreshPrzestrzeliny = 120, int secondCannyThreshPrzestrzeliny = 50, TargetDetails useThisTarget = null)
         {
+            result.Target.BlackCenter = useThisTarget.BlackCenter;
+            result.Target.BlackR = useThisTarget.BlackR;
 
             #region wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
@@ -110,17 +126,20 @@ namespace BidaSius
             //     bo_ord[3]};
 
             //pokaż wszystko na oryginalnym obrazku 
-            Mat klodn = frame.Clone();
-            CvInvoke.Polylines(klodn, Array.ConvertAll(src_vertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
-            result.TargetMarked = klodn;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            Mat targetMarked = frame.Clone();
+            CvInvoke.Polylines(targetMarked, Array.ConvertAll(src_vertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
+            result.TargetMarked = targetMarked;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
             #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
             #region tranformacja perspektywy
+
             Mat warpMatrix = CvInvoke.GetPerspectiveTransform(src_vertices, dstVertices);
             Mat warped = new Mat();
             Size size = new Size(kwadratWidth, kwadratWidth);
             CvInvoke.WarpPerspective(frame, warped, warpMatrix, size, Inter.Linear, Warp.Default);
-            result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+          //  result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
             #endregion tranformacja perspektywy
 
             #region gray, blur warped - nie uzywane juz 
@@ -148,67 +167,11 @@ namespace BidaSius
 
             #endregion gray, blur warped
 
-            #region rysowanie tarczy /obliczanie wartosci
-
-            Mat circleImage = warped.Clone();
-
-            #region pierscienie 
-
-            const int tenRing = 115;
-            const int nineRing = 275;
-            const int eightRing = 435;
-            const int sevenRing = 595;
-            const int sixRing = 755;
-            const int fiveRing = 915;
-            const int fourRing = 1075;
-            const int threeRing = 1235;
-            const int twoRing = 1395;
-            const int oneRing = 1555;
-            const int fourAndHalf = 45;
-            const int tenRingWidth = 115;
-            const int restRingWidth = 160; // to jest suma czyli 2x80
-            const int innerTen = 50;
-
-            #endregion pierscienie 
-
             #region rysowanie pierscieni
 
-            Point center;
-            double radius;
-            radius = useThisTarget.BlackR;
-            center = useThisTarget.BlackCenter;
-
-            result.Target.BlackCenter = center;
-            result.Target.BlackR = radius;
-
-            CvInvoke.Circle(circleImage, center, (int)radius, new Bgr(Color.Brown).MCvScalar, 1, LineType.AntiAlias, 0);
-
-
-            double pix = sevenRing / (2 * radius);
-
-            double innertenR = (innerTen / pix) / 2;
-            double tenR = (tenRing / pix) / 2;
-            double nineR = (nineRing / pix) / 2;
-            double eightR = (eightRing / pix) / 2;
-            double sevenR = (sevenRing / pix) / 2;
-            double sixR = (sixRing / pix) / 2;
-            double fiveR = (fiveRing / pix) / 2;
-            double fourR = (fourRing / pix) / 2;
-            double threR = (threeRing / pix) / 2;
-            double twoR = (twoRing / pix) / 2;
-            double oneR = (oneRing / pix) / 2;
-
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(innertenR), new Bgr(Color.White).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(tenR), new Bgr(Color.White).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(nineR), new Bgr(Color.White).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(eightR), new Bgr(Color.White).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(sevenR), new Bgr(Color.White).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(sixR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(fiveR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(fourR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(threR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(twoR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
-            CvInvoke.Circle(circleImage, center, Convert.ToInt32(oneR), new Bgr(Color.Black).MCvScalar, 1, LineType.AntiAlias, 0);
+            Mat circleImage = warped.Clone();
+            var pix = Pix(useThisTarget.BlackR);
+            DrawCircles(circleImage, pix, useThisTarget.BlackCenter);
 
             #endregion rysowanie pierscieni
 
@@ -250,16 +213,16 @@ namespace BidaSius
             // CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(11, 11), 1, 1);
             //    CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(7, 7), 1, 1);
 
-            result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+           // result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                                                       //#######test
             #endregion test
 
             #endregion blur gray canny samej tarczy
 
+            #region rozpoznawanie strzału
 
-            int czteryiPolmmR = Convert.ToInt32((fourAndHalf / pix) / 2);
-            int zapasSize = 5; //to wywalić do jakiegoś txtbox czy coś
-
+            int czteryIpolmmR_int = Convert.ToInt32(FourNHalfR(pix));
+            int zapasSize = 5;
 
             CircleF[] przestrzeliny = CvInvoke.HoughCircles(smoothedGrayFrame12,
                 HoughType.Gradient,
@@ -267,72 +230,21 @@ namespace BidaSius
                 400,
                 firstCannyThreshPrzestrzeliny,
                 secondCannyThreshPrzestrzeliny,
-                czteryiPolmmR - zapasSize,
-                czteryiPolmmR + zapasSize);
+                czteryIpolmmR_int - zapasSize,
+                czteryIpolmmR_int + zapasSize);
 
             foreach (CircleF shot in przestrzeliny)
             {
-                Shot sh = new Shot();
-                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryiPolmmR, new Bgr(Color.Blue).MCvScalar, 1, LineType.AntiAlias, 0);
-                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryiPolmmR - zapasSize, new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
-                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryiPolmmR + zapasSize, new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
+                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int, new Bgr(Color.Blue).MCvScalar, 1, LineType.AntiAlias, 0);
+                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int - zapasSize, new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
+                CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int + zapasSize, new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
 
-
-                Point shotCenter = Point.Round(shot.Center);
-
-
-                //double odlegl = CvInvoke.cv(ShotCenter - center);
-                var diffX = shotCenter.X - center.X;
-                var diffY = shotCenter.Y - center.Y;
-                double odlegl = Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2));
-                sh.Length = odlegl * pix;
-
-                double dziesietna = (restRingWidth / pix) / 2; //dziesietna dla pierscieni 9 -- 
-                double dziesietna1 = dziesietna / 10;
-
-                double dziesietna10 = ((tenRingWidth + innerTen) / pix) / 2;// dziesietna dla 10 
-                double dziesietna11 = dziesietna10 / 10;
-                double dl = odlegl - czteryiPolmmR;
-
-                //  Point strzalObliczonyOdSrodka = new Point(center.X + diffX, center.Y + diffY);
-
-                Point strzalObliczonyOdSrodkaPix = new Point(Convert.ToInt32(diffX * pix), Convert.ToInt32(diffY * pix));
-                sh.PointFromCenter = strzalObliczonyOdSrodkaPix;
-
-                #region wyliczenie wartośći strzału
-                double wartosc = 0;
-                //sprawdzenie wartości strzału
-                if (dl <= tenR)
-                    wartosc = CountdziesietneDycha(10, odlegl, czteryiPolmmR, tenR, dziesietna11, innertenR);
-                else if (dl <= nineR)
-                    wartosc = Countdziesietne(9, odlegl, czteryiPolmmR, nineR, dziesietna1);
-                else if (dl <= eightR)
-                    wartosc = Countdziesietne(8, odlegl, czteryiPolmmR, eightR, dziesietna1);
-                else if (dl <= sevenR)
-                    wartosc = Countdziesietne(7, odlegl, czteryiPolmmR, sevenR, dziesietna1);
-                else if (dl <= sixR)
-                    wartosc = Countdziesietne(6, odlegl, czteryiPolmmR, sixR, dziesietna1);
-                else if (dl <= fiveR)
-                    wartosc = Countdziesietne(5, odlegl, czteryiPolmmR, fiveR, dziesietna1);
-                else if (dl <= fourR)
-                    wartosc = Countdziesietne(4, odlegl, czteryiPolmmR, fourR, dziesietna1);
-                else if (dl <= threR)
-                    wartosc = Countdziesietne(3, odlegl, czteryiPolmmR, threR, dziesietna1);
-                else if (dl <= twoR)
-                    wartosc = Countdziesietne(2, odlegl, czteryiPolmmR, twoR, dziesietna1);
-                else if (dl <= oneR)
-                    wartosc = Countdziesietne(1, odlegl, czteryiPolmmR, oneR, dziesietna1);
-
-                sh.Value = wartosc;
-                sh.Time = DateTime.Now.Ticks;
-                result.Shot = sh;
-                #endregion wyliczenie wartośći strzału
-
-
+                result.Shot = WyliczWartoscPrzestrzeliny(shot.Center, useThisTarget);
             }
 
+            #endregion
+
             result.TargetScanWithResult = circleImage;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            #endregion rysowanie tarczy
         }
 
         public static ProcessFrameResult ProcessFromFile(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
@@ -348,7 +260,7 @@ namespace BidaSius
             int zapasSize = 5; //zapas z jakim ma wykrywać przestrzeline - to wywalić do jakiegoś txtbox czy coś
             int czteryIpolmmR_int = Convert.ToInt32(FourNHalfR(pix));
 
-         
+
             Mat circleImage = frame;
 
             #region hocki klocki przepierdalanie obrazu
@@ -438,7 +350,6 @@ namespace BidaSius
             return result;
 
         }
-
 
         private static double Pix(double radius)
         {
@@ -570,7 +481,7 @@ namespace BidaSius
                 }
             }
 
-           // CvInvoke.PutText(obrazek, wartosc.ToString(), new Point(30, 30), FontFace.HersheyComplexSmall, 2, new Bgr(Color.Green).MCvScalar);
+            // CvInvoke.PutText(obrazek, wartosc.ToString(), new Point(30, 30), FontFace.HersheyComplexSmall, 2, new Bgr(Color.Green).MCvScalar);
             return wartosc;
         }
 
@@ -586,7 +497,7 @@ namespace BidaSius
                 }
             }
 
-           // CvInvoke.PutText(obrazek, wartosc.ToString(), new Point(30, 30), FontFace.HersheyComplexSmall, 2, new Bgr(Color.Green).MCvScalar);
+            // CvInvoke.PutText(obrazek, wartosc.ToString(), new Point(30, 30), FontFace.HersheyComplexSmall, 2, new Bgr(Color.Green).MCvScalar);
             return wartosc;
         }
 
@@ -614,8 +525,8 @@ namespace BidaSius
         public static ProcessFrameResult ManualProcessFrame(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
         {
             PointF[] srcVertices;
-         //   ProcessFrameResult result = new ProcessFrameResult();
-           // result.Target = new TargetDetails();
+            //   ProcessFrameResult result = new ProcessFrameResult();
+            // result.Target = new TargetDetails();
             int kwadratWidth;
 
             srcVertices = useThisTarget.TargetRect;
@@ -644,9 +555,9 @@ namespace BidaSius
             //     bo_ord[3]};
 
             //pokaż wszystko na oryginalnym obrazku 
-         //   Mat klodn = frame.Clone();
-          //  CvInvoke.Polylines(klodn, Array.ConvertAll(srcVertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
-           // result.TargetMarked = klodn;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            //   Mat klodn = frame.Clone();
+            //  CvInvoke.Polylines(klodn, Array.ConvertAll(srcVertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
+            // result.TargetMarked = klodn;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
             #region tranformacja perspektywy
@@ -654,14 +565,14 @@ namespace BidaSius
             Mat warped = new Mat();
             Size size = new Size(kwadratWidth, kwadratWidth);
             CvInvoke.WarpPerspective(frame, warped, warpMatrix, size, Inter.Linear, Warp.Default);
-           // result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            // result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
             #endregion tranformacja perspektywy
 
 
-           return  ProcessFromFile(warped, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
+            return ProcessFromFile(warped, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
 
 
-}
+        }
 
 
 

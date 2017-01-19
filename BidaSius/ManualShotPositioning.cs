@@ -147,9 +147,9 @@ namespace BidaSius
             }
 
             // See if the point is above a non-transparent pixel.
-            int i = x - ShotMarkLocation.X;
-            int j = y - ShotMarkLocation.Y;
-            return (ShotMark.GetPixel(i, j).A > 0);
+            //int i = x - ShotMarkLocation.X;
+            //int j = y - ShotMarkLocation.Y;
+            //return (ShotMark.GetPixel(i, j).A > 0);
         }
 
 
