@@ -32,6 +32,10 @@ namespace tarcza
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.captureButton = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.buttonPauseAndSelect = new System.Windows.Forms.Button();
             this.trackThreshOne = new System.Windows.Forms.TrackBar();
             this.trackthreshTwo = new System.Windows.Forms.TrackBar();
             this.trackthresh4 = new System.Windows.Forms.TrackBar();
@@ -68,12 +72,9 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
-            this.buttonPauseAndSelect = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.captureButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackThreshOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthreshTwo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthresh4)).BeginInit();
@@ -94,7 +95,6 @@ namespace tarcza
             ((System.ComponentModel.ISupportInitialize)(this.textBoxBR)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxTLX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxBL)).BeginInit();
-            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -136,6 +136,45 @@ namespace tarcza
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // captureButton
+            // 
+            this.captureButton.Location = new System.Drawing.Point(485, 236);
+            this.captureButton.Name = "captureButton";
+            this.captureButton.Size = new System.Drawing.Size(71, 62);
+            this.captureButton.TabIndex = 48;
+            this.captureButton.Text = "Start Capture";
+            this.captureButton.UseVisualStyleBackColor = true;
+            this.captureButton.Click += new System.EventHandler(this.CaptureButtonClick);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.comboBox1);
+            this.groupBox4.Location = new System.Drawing.Point(193, 223);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(161, 75);
+            this.groupBox4.TabIndex = 47;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Trening";
+            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(19, 24);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 0;
+            // 
+            // buttonPauseAndSelect
+            // 
+            this.buttonPauseAndSelect.Location = new System.Drawing.Point(369, 236);
+            this.buttonPauseAndSelect.Name = "buttonPauseAndSelect";
+            this.buttonPauseAndSelect.Size = new System.Drawing.Size(100, 61);
+            this.buttonPauseAndSelect.TabIndex = 46;
+            this.buttonPauseAndSelect.Text = "Pauzuj Poka¿ Zapisz";
+            this.buttonPauseAndSelect.UseVisualStyleBackColor = true;
+            this.buttonPauseAndSelect.Click += new System.EventHandler(this.buttonPauseAndSelect_Click_1);
             // 
             // trackThreshOne
             // 
@@ -529,45 +568,6 @@ namespace tarcza
             this.textBoxBL.TabIndex = 15;
             this.textBoxBL.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
             // 
-            // buttonPauseAndSelect
-            // 
-            this.buttonPauseAndSelect.Location = new System.Drawing.Point(369, 236);
-            this.buttonPauseAndSelect.Name = "buttonPauseAndSelect";
-            this.buttonPauseAndSelect.Size = new System.Drawing.Size(100, 61);
-            this.buttonPauseAndSelect.TabIndex = 46;
-            this.buttonPauseAndSelect.Text = "Pauzuj Poka¿ Zapisz";
-            this.buttonPauseAndSelect.UseVisualStyleBackColor = true;
-            this.buttonPauseAndSelect.Click += new System.EventHandler(this.buttonPauseAndSelect_Click_1);
-            // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.comboBox1);
-            this.groupBox4.Location = new System.Drawing.Point(193, 223);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(161, 75);
-            this.groupBox4.TabIndex = 47;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Trening";
-            this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(19, 24);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 0;
-            // 
-            // captureButton
-            // 
-            this.captureButton.Location = new System.Drawing.Point(485, 236);
-            this.captureButton.Name = "captureButton";
-            this.captureButton.Size = new System.Drawing.Size(71, 62);
-            this.captureButton.TabIndex = 48;
-            this.captureButton.Text = "Start Capture";
-            this.captureButton.UseVisualStyleBackColor = true;
-            this.captureButton.Click += new System.EventHandler(this.CaptureButtonClick);
-            // 
             // CameraCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -575,10 +575,14 @@ namespace tarcza
             this.ClientSize = new System.Drawing.Size(572, 341);
             this.Controls.Add(this.tabControl1);
             this.Name = "CameraCapture";
+            this.ShowIcon = false;
             this.Text = "Camera Capture";
+            this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CameraCapture_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackThreshOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthreshTwo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthresh4)).EndInit();
@@ -603,7 +607,6 @@ namespace tarcza
             ((System.ComponentModel.ISupportInitialize)(this.textBoxBR)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxTLX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxBL)).EndInit();
-            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

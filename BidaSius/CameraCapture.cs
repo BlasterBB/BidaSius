@@ -73,6 +73,9 @@ namespace tarcza
             CvInvoke.UseOpenCL = false;
             ReadSettings();
             FillComPorts();
+            My_Timer.Interval = 5000 ;
+            My_Timer.Tick += new EventHandler((sender, args) => {System.GC.Collect(); });
+            My_Timer.Start();
 
         }
 
@@ -127,20 +130,19 @@ namespace tarcza
                         MainTargetDetails = useThisTarget
                     };
                     result = CaptureHelper.ProcessFrame(acd);
-                    UstawRezultat(result);
-                      result.Dispose();
+                    //UstawRezultat(result);
+                    //result.Dispose();
 
                 }
-                //else if (useManualShotPositiong && !alreadyManual)
-                //{
-                //    alreadyManual = true;
-                //    result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1,
-                //        useThisTarget);
-                //}
-                //else
-                //    return;
+                else if (useManualShotPositiong && !alreadyManual)
+                {
+                    alreadyManual = true;
+                    result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+                }
+                else
+                    return;
 
-                // UstawRezultat(result);
+                UstawRezultat(result);
             }
         }
 
@@ -373,7 +375,7 @@ namespace tarcza
                         }
                         break;
                     case BidaSiusState.SetTargetSizeNPosition:
-                       
+
                         using (result.Warped)
                         {
                             using (Mat mm1 = result.Warped.Clone())
@@ -383,11 +385,13 @@ namespace tarcza
                         }
                         break;
                     case BidaSiusState.Play:
-                        if(MainF == null)
+                       
+                        if (MainF == null)
                             MainF = new MainForm();
 
                         MainForm mf = (MainForm)MainF;
-                        mf.Show();
+                        if (!mf.IsAccessible)
+                            mf.Show();
 
                         if (mf != null && result.Shot != null)
                         {
@@ -404,6 +408,14 @@ namespace tarcza
                             //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
                             ScrollPaper();
                             mf.RefreshTarget();
+
+                            if (result.TargetScanWithResult != null)
+                            {
+                                using (Mat mm = result.TargetScanWithResult.Clone())
+                                {
+                                    nw.setImage(mm.Bitmap);
+                                }
+                            }
 
                         }
 
@@ -446,7 +458,7 @@ namespace tarcza
                 }
                 //  result.TargetMarked.Dispose();
                 //result.TargetScanWithResult?.Dispose();
-               
+
 
 
             }
@@ -562,22 +574,22 @@ namespace tarcza
             ProcessFromFile();
         }
 
-        private void buttonPauseAndSelect_Click(object sender, EventArgs e)
+        #endregion
+
+        private void buttonPauseAndSelect_Click_1(object sender, EventArgs e)
         {
             useManualShotPositiong = true;
             buttonPauseAndSelect.Enabled = false;
         }
 
-        #endregion
-
-        private void buttonPauseAndSelect_Click_1(object sender, EventArgs e)
+        private void groupBox4_Enter(object sender, EventArgs e)
         {
 
         }
 
-        private void groupBox4_Enter(object sender, EventArgs e)
+        private void CameraCapture_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            ReleaseData();
         }
     }
 

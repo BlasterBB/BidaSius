@@ -135,10 +135,7 @@ namespace BidaSius
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-
-
-
+            
             return result;
 
 
@@ -188,18 +185,21 @@ namespace BidaSius
 
         }
 
-        private static void FuseThisTarget(PointF[] src_vertices, int kwadratWidth, ProcessFrameResult result, AditionaCapturelData acd)
+        private static void FuseThisTarget(PointF[] src_vertices, int kwadratWidth, ProcessFrameResult result,
+            AditionaCapturelData acd)
         {
             result.Target.BlackCenter = acd.MainTargetDetails.BlackCenter;
             result.Target.BlackR = acd.MainTargetDetails.BlackR;
 
             #region wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
-            PointF[] dstVertices = new PointF[] {
-                 new PointF(0,0),//tl topleft
-                 new PointF(kwadratWidth, 0),//tr
-                 new PointF(kwadratWidth, kwadratWidth),//br
-                 new PointF(0, kwadratWidth)};//bl
+            PointF[] dstVertices = new PointF[]
+            {
+                new PointF(0, 0), //tl topleft
+                new PointF(kwadratWidth, 0), //tr
+                new PointF(kwadratWidth, kwadratWidth), //br
+                new PointF(0, kwadratWidth)
+            }; //bl
 
             //kwadrat z lewym dolnym rogiem w tym samym miejscu co znaleziony - tylko po to żeby zobrazować
             //PointF[] dst_vertices_kwadrat_lewydol = new PointF[] {
@@ -210,119 +210,76 @@ namespace BidaSius
 
             #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
-            #region tranformacja perspektywy
-
-            Mat warpMatrix = CvInvoke.GetPerspectiveTransform(src_vertices, dstVertices);
-            Mat warped = new Mat();
-            Size size = new Size(kwadratWidth, kwadratWidth);
-            CvInvoke.WarpPerspective(acd.Frame, warped, warpMatrix, size, Inter.Linear, Warp.Default);
-            //  result.Warped = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-            #endregion tranformacja perspektywy
-
-            #region gray, blur warped - nie uzywane juz 
-
-            // no to jedziemy wykrywanie kółek 
-            //Mat smallGrayFrame1 = new Mat();
-            //Mat gray_image1 = new Mat();
-            //CvInvoke.CvtColor(warped, gray_image1, ColorConversion.Bgr2Gray);
-            //CvInvoke.PyrDown(gray_image1, smallGrayFrame1);
-            //Mat smoothedGrayFrame1 = new Mat();
-            //CvInvoke.PyrUp(smallGrayFrame1, smoothedGrayFrame1);
-            //CvInvoke.GaussianBlur(smoothedGrayFrame1, smoothedGrayFrame1, new Size(11, 11), 1, 1);
-            //CvInvoke.GaussianBlur(smoothedGrayFrame1, smoothedGrayFrame1, new Size(9, 9), 1, 1);
-
-
-            ///########test 
-            //       Mat fake1 = new Mat();
-            //       double otsu_thresh_val1 = CvInvoke.Threshold(smoothedGrayFrame1, fake1, firstCannyThreshPrzestrzeliny, 255, ThresholdType.Binary );
-            //     Mat canny_warped = new Mat();
-            ////    CvInvoke.Canny(fake1, canny_warped, firstCannyThresh, secondCannyThresh);
-            // CvInvoke.GaussianBlur(fake1, canny_warped, new Size(9, 9), 1, 1);
-            // //   result.foundKontur = canny_output11;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            ///########test 
-            //   result.WarpedTargetCanny = smoothedGrayFrame1;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-            #endregion gray, blur warped
-
-            #region rysowanie pierscieni
-
-            //Mat circleImage = warped.Clone();
-            var pix = Pix(acd.MainTargetDetails.BlackR);
-            //DrawCircles(circleImage, pix, useThisTarget.BlackCenter);
-
-            #endregion rysowanie pierscieni
-
-            #region blur gray canny samej tarczy
-
-            Mat canny_output12 = new Mat();
-            //As for your answer to number two, blur the image, convert to greyscale, then threshold to eliminate lighting differences is the usual solution
-
-            Mat smallGrayFrame12 = new Mat();
-            Mat smoothedGrayFrame12 = new Mat();
-            CvInvoke.PyrDown(warped, smallGrayFrame12);
-            CvInvoke.PyrUp(smallGrayFrame12, smoothedGrayFrame12);
-            CvInvoke.CvtColor(smoothedGrayFrame12, smoothedGrayFrame12, ColorConversion.Bgr2Gray);
-            // CvInvoke.GaussianBlur(smoothedGrayFrame12, smoothedGrayFrame12, new Size(9, 9), 1, 1);
-            result.SmoothedOryginal = smoothedGrayFrame12;
-
-
-            #region test
-            //#######test
-          //  Mat fake12 = new Mat();
-            //                   double otsu_thresh_val12 = CvInvoke.Threshold(smoothedGrayFrame12, fake12, firstCannyThresh, secondCannyThresh, ThresholdType.Binary & ThresholdType.Otsu);
-            //CvInvoke.AdaptiveThreshold(smoothedGrayFrame12, fake12, 255, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 3, 2);
-            //1CvInvoke.GaussianBlur(fake12, fake12, new Size(9, 9), 1, 1);
-            //  CvInvoke.GaussianBlur(fake12, fake12, new Size(9, 9), 1, 1);
-            //    C1111vInvoke.GaussianBlur(fake12, fake12, new Size(9, 9), 1, 1);
-            //            We don't need the _img. We are interested in only the otsu_thresh_val but unfortunately, currently there is no method in OpenCV which allows you to compute only the threshold value.
-
-            //Use the Otsu's threshold value as higher threshold and half of the same as the lower threshold for Canny's algorithm.
-
-            //double high_thresh_val1 = otsu_thresh_val1,
-            //       lower_thresh_val1 = otsu_thresh_val1 * 0.5;
-
-
-
-
-            //CvInvoke.GaussianBlur(warped, fake12, new Size(9, 9), 1, 1);
-            CvInvoke.Canny(smoothedGrayFrame12, canny_output12, acd.FirstCannyThresh, acd.secondCannyThresh);
-            //                    CvInvoke.Canny(smoothedGrayFrame12, canny_output12, 120, 50);
-            // CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(11, 11), 1, 1);
-            //    CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(7, 7), 1, 1);
-
-            // result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-            //#######test
-            #endregion test
-
-            #endregion blur gray canny samej tarczy
-
-            #region rozpoznawanie strzału
-
-            int czteryIpolmmRInt = Convert.ToInt32(FourNHalfR(pix));
-            int zapasSize = 5;
-
-            CircleF[] przestrzeliny = CvInvoke.HoughCircles(smoothedGrayFrame12,
-                HoughType.Gradient,
-                1,
-                400,
-                acd.firstCannyThresh1,
-                acd.secondCannyThresh1,
-                czteryIpolmmRInt - zapasSize,
-                czteryIpolmmRInt + zapasSize);
-
-            foreach (CircleF shot in przestrzeliny)
+            using (Mat warped = new Mat())
             {
-                CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt, new Bgr(Color.Blue).MCvScalar, 1, LineType.AntiAlias, 0);
-                CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt - zapasSize, new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
-                CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt + zapasSize, new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
+                #region tranformacja perspektywy
 
-                result.Shot = WyliczWartoscPrzestrzeliny(shot.Center, acd.MainTargetDetails);
+                Mat warpMatrix = CvInvoke.GetPerspectiveTransform(src_vertices, dstVertices);
+                Size size = new Size(kwadratWidth, kwadratWidth);
+                CvInvoke.WarpPerspective(acd.Frame, warped, warpMatrix, size, Inter.Linear, Warp.Default);
+
+                #endregion tranformacja perspektywy
+
+                #region rysowanie pierscieni
+
+                //Mat circleImage = warped.Clone();
+                var pix = Pix(acd.MainTargetDetails.BlackR);
+                //DrawCircles(circleImage, pix, useThisTarget.BlackCenter);
+
+                #endregion rysowanie pierscieni
+
+                #region blur gray canny samej tarczy
+
+                Mat canny_output12 = new Mat();
+                Mat smallGrayFrame12 = new Mat();
+                Mat smoothedGrayFrame12 = new Mat();
+
+                CvInvoke.PyrDown(warped, smallGrayFrame12);
+                CvInvoke.PyrUp(smallGrayFrame12, smoothedGrayFrame12);
+                CvInvoke.CvtColor(smoothedGrayFrame12, smoothedGrayFrame12, ColorConversion.Bgr2Gray);
+                // CvInvoke.GaussianBlur(smoothedGrayFrame12, smoothedGrayFrame12, new Size(9, 9), 1, 1);
+                result.SmoothedOryginal = smoothedGrayFrame12;
+
+
+                #region test
+                
+                CvInvoke.Canny(smoothedGrayFrame12, canny_output12, acd.FirstCannyThresh, acd.secondCannyThresh);
+               
+                #endregion test
+
+                #endregion blur gray canny samej tarczy
+
+                #region rozpoznawanie strzału
+
+                int czteryIpolmmRInt = Convert.ToInt32(FourNHalfR(pix));
+                int zapasSize = 5;
+
+                CircleF[] przestrzeliny = CvInvoke.HoughCircles(smoothedGrayFrame12,
+                    HoughType.Gradient,
+                    1,
+                    400,
+                    acd.firstCannyThresh1,
+                    acd.secondCannyThresh1,
+                    czteryIpolmmRInt - zapasSize,
+                    czteryIpolmmRInt + zapasSize);
+
+                foreach (CircleF shot in przestrzeliny)
+                {
+                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt, new Bgr(Color.Blue).MCvScalar, 1,
+                        LineType.AntiAlias, 0);
+                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt - zapasSize,
+                        new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
+                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt + zapasSize,
+                        new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
+
+                    result.Shot = WyliczWartoscPrzestrzeliny(shot.Center, acd.MainTargetDetails);
+                    result.TargetScanWithResult = warped.Clone();//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    break;
+                }
+
+                #endregion
+
             }
-
-            #endregion
-            if(przestrzeliny.Length>0)
-            result.TargetScanWithResult = warped;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
         }
 
         public static ProcessFrameResult ProcessFromFile(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
@@ -364,7 +321,7 @@ namespace BidaSius
 
             #region test
             //#######test
-            Mat fake12 = new Mat();
+           
             //                   double otsu_thresh_val12 = CvInvoke.Threshold(smoothedGrayFrame12, fake12, firstCannyThresh, secondCannyThresh, ThresholdType.Binary & ThresholdType.Otsu);
             //CvInvoke.AdaptiveThreshold(smoothedGrayFrame12, fake12, 255, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 3, 2);
             //1CvInvoke.GaussianBlur(fake12, fake12, new Size(9, 9), 1, 1);
@@ -386,43 +343,25 @@ namespace BidaSius
             // CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(11, 11), 1, 1);
             //    CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(7, 7), 1, 1);
 
-            result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+           // result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
                                                       //#######test
             #endregion test
 
             #endregion blur gray canny samej tarczy
 
 
-            result.SmOryCanny = smoothedGrayFrame12;
+           // result.SmOryCanny = smoothedGrayFrame12;
 
             #endregion  hocki klocki przepierdalanie obrazu
 
 
-            //tymczasowe odpal manualne pozycjonowanie 
+            //odpal manualne pozycjonowanie 
             ManualShotPositioning msp = new ManualShotPositioning();
             msp.SetTargetAndShot(circleImage, czteryIpolmmR_int, useThisTarget);
             DialogResult dr = msp.ShowDialog();
             CvInvoke.Circle(circleImage, Point.Round(msp.SelectedPoint), czteryIpolmmR_int, new Bgr(Color.DeepPink).MCvScalar, 1, LineType.AntiAlias, 0);
             result.Shot = WyliczWartoscPrzestrzeliny(msp.SelectedPoint, useThisTarget);
             DrawCircles(circleImage, pix, useThisTarget.BlackCenter);
-            //CircleF[] przestrzeliny = CvInvoke.HoughCircles(smoothedGrayFrame12,
-            //    HoughType.Gradient,
-            //    1,
-            //    400,
-            //    firstCannyThresh1,
-            //    secondCannyThresh1,
-            //    czteryIpolmmR_int - zapasSize,
-            //    czteryIpolmmR_int + zapasSize);
-
-            //foreach (CircleF shot in przestrzeliny)
-            //{
-            //    CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int, new Bgr(Color.Blue).MCvScalar, 1, LineType.AntiAlias, 0);
-            //    CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int - zapasSize, new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
-            //    CvInvoke.Circle(circleImage, Point.Round(shot.Center), czteryIpolmmR_int + zapasSize, new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
-
-            //    result.Shot = WyliczWartoscPrzestrzeliny(circleImage, shot.Center, useThisTarget);
-            //}
-
             result.TargetScanWithResult = circleImage;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
             return result;
@@ -603,8 +542,6 @@ namespace BidaSius
         public static ProcessFrameResult ManualProcessFrame(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
         {
             PointF[] srcVertices;
-            //   ProcessFrameResult result = new ProcessFrameResult();
-            // result.Target = new TargetDetails();
             int kwadratWidth;
 
             srcVertices = useThisTarget.TargetRect;
@@ -615,8 +552,6 @@ namespace BidaSius
             kwadratWidth = Convert.ToInt32(srcVertices[2].X - srcVertices[3].X);
 
 
-            //FuseThisTarget(frame, srcVertices, kwadratWidth, result, firstCannyThresh, secondCannyThresh, firstCannyThresh1, secondCannyThresh1, useThisTarget);
-
             #region wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
             PointF[] dstVertices = new PointF[] {
@@ -625,17 +560,7 @@ namespace BidaSius
                  new PointF(kwadratWidth, kwadratWidth),//br
                  new PointF(0, kwadratWidth)};//bl
 
-            //kwadrat z lewym dolnym rogiem w tym samym miejscu co znaleziony - tylko po to żeby zobrazować
-            //PointF[] dst_vertices_kwadrat_lewydol = new PointF[] {
-            //     new PointF(bo_ord[3].X , bo_ord[3].Y - kwadratWidth),
-            //     new PointF(bo_ord[3].X + kwadratWidth, bo_ord[3].Y - kwadratWidth),
-            //     new PointF(bo_ord[3].X + kwadratWidth, bo_ord[3].Y),
-            //     bo_ord[3]};
-
-            //pokaż wszystko na oryginalnym obrazku 
-            //   Mat klodn = frame.Clone();
-            //  CvInvoke.Polylines(klodn, Array.ConvertAll(srcVertices, Point.Round), true, new Bgr(Color.DarkOrange).MCvScalar, 2);
-            // result.TargetMarked = klodn;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+           
             #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
             #region tranformacja perspektywy
