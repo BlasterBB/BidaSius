@@ -78,6 +78,12 @@
     <Compile Include="ManualShotPositioning.Designer.cs">
       <DependentUpon>ManualShotPositioning.cs</DependentUpon>
     </Compile>
+    <Compile Include="NakedPic.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NakedPic.Designer.cs">
+      <DependentUpon>NakedPic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeriesRow.cs">
@@ -99,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ManualShotPositioning.resx">
       <DependentUpon>ManualShotPositioning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NakedPic.resx">
+      <DependentUpon>NakedPic.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

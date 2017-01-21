@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using BidaSius;
 using Emgu.CV.Cuda;
 using Stream = System.IO.Stream;
@@ -24,6 +25,7 @@ namespace tarcza
         #region props
 
         public Form MainF { get; set; }
+        public Form NakedF { get; set; }
         private Capture _capture = null;
         private bool _captureInProgress;
         delegate void SkonczonyPrzepierdalanie(ProcessFrameResult result);
@@ -385,39 +387,8 @@ namespace tarcza
                         }
                         break;
                     case BidaSiusState.Play:
+                       Play(result);
                        
-                        if (MainF == null)
-                            MainF = new MainForm();
-
-                        MainForm mf = (MainForm)MainF;
-                        if (!mf.IsAccessible)
-                            mf.Show();
-
-                        if (mf != null && result.Shot != null)
-                        {
-                            var lastshot = mf.Shots.LastOrDefault();
-                            alreadyManual = false;
-                            useManualShotPositiong = false;
-                            buttonPauseAndSelect.Enabled = true;
-                            if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
-                                return;
-                            mf.Shots.Add(result.Shot);
-                            result.TargetScanWithResult?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() + ".jpg");
-                            result.Warped?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() + "_oryg.jpg");
-                            //MessageBox.Show("zarejestrowane " + result.shot.Value.ToString());
-                            //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
-                            ScrollPaper();
-                            mf.RefreshTarget();
-
-                            if (result.TargetScanWithResult != null)
-                            {
-                                using (Mat mm = result.TargetScanWithResult.Clone())
-                                {
-                                    nw.setImage(mm.Bitmap);
-                                }
-                            }
-
-                        }
 
                         break;
                     default:
@@ -461,6 +432,81 @@ namespace tarcza
 
 
 
+            }
+        }
+
+        private void Play(ProcessFrameResult result)
+        {
+            if ((string) comboGame.SelectedItem == "naked")
+            {
+                if (result.TargetScanWithResult != null)
+                {
+                    using (Mat mm = result.TargetScanWithResult.Clone())
+                    {
+                        nw.setImage(mm.Bitmap);
+                    }
+                }
+
+                if (result.Shot != null)
+                {
+                    if (NakedF == null)
+                        NakedF = new NakedPic();
+
+                    NakedPic np = (NakedPic)NakedF;
+                    if (!NakedF.IsAccessible)
+                        NakedF.Show();
+
+                    var lastshot = np.Shots.LastOrDefault();
+                    alreadyManual = false;
+                    useManualShotPositiong = false;
+                    buttonPauseAndSelect.Enabled = true;
+                    if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                        return;
+                    np.Shots.Add(result.Shot);
+
+                    if (result.Shot.Value > 8.1)
+                        ((NakedPic)NakedF).HideOneTile();
+                    else
+                        ((NakedPic)NakedF).Missed();
+
+                }
+            }
+            else
+            {
+                if (MainF == null)
+                    MainF = new MainForm();
+
+                MainForm mf = (MainForm) MainF;
+                if (!mf.IsAccessible)
+                    mf.Show();
+
+                if (mf != null && result.Shot != null)
+                {
+                    var lastshot = mf.Shots.LastOrDefault();
+                    alreadyManual = false;
+                    useManualShotPositiong = false;
+                    buttonPauseAndSelect.Enabled = true;
+                    if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                        return;
+                    mf.Shots.Add(result.Shot);
+                    result.TargetScanWithResult?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" +
+                                                      DateTime.Now.Ticks.ToString() + ".jpg");
+                    result.Warped?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() +
+                                        "_oryg.jpg");
+                    //MessageBox.Show("zarejestrowane " + result.shot.Value.ToString());
+                    //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
+                    ScrollPaper();
+                    mf.RefreshTarget();
+
+                    if (result.TargetScanWithResult != null)
+                    {
+                        using (Mat mm = result.TargetScanWithResult.Clone())
+                        {
+                            nw.setImage(mm.Bitmap);
+                        }
+                    }
+
+                }
             }
         }
 
@@ -590,6 +636,13 @@ namespace tarcza
         private void CameraCapture_FormClosing(object sender, FormClosingEventArgs e)
         {
             ReleaseData();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //NakedPic nn = new NakedPic();
+            //nn.Show();
+            ((NakedPic)NakedF).HideOneTile();
         }
     }
 

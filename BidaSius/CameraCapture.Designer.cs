@@ -34,7 +34,7 @@ namespace tarcza
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.captureButton = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboGame = new System.Windows.Forms.ComboBox();
             this.buttonPauseAndSelect = new System.Windows.Forms.Button();
             this.trackThreshOne = new System.Windows.Forms.TrackBar();
             this.trackthreshTwo = new System.Windows.Forms.TrackBar();
@@ -72,6 +72,7 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -114,6 +115,7 @@ namespace tarcza
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.captureButton);
             this.tabPage1.Controls.Add(this.groupBox4);
             this.tabPage1.Controls.Add(this.buttonPauseAndSelect);
@@ -149,7 +151,7 @@ namespace tarcza
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.comboBox1);
+            this.groupBox4.Controls.Add(this.comboGame);
             this.groupBox4.Location = new System.Drawing.Point(193, 223);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(161, 75);
@@ -158,13 +160,16 @@ namespace tarcza
             this.groupBox4.Text = "Trening";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
-            // comboBox1
+            // comboGame
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(19, 24);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 0;
+            this.comboGame.FormattingEnabled = true;
+            this.comboGame.Items.AddRange(new object[] {
+            "naked",
+            "normal"});
+            this.comboGame.Location = new System.Drawing.Point(19, 24);
+            this.comboGame.Name = "comboGame";
+            this.comboGame.Size = new System.Drawing.Size(121, 21);
+            this.comboGame.TabIndex = 0;
             // 
             // buttonPauseAndSelect
             // 
@@ -568,6 +573,16 @@ namespace tarcza
             this.textBoxBL.TabIndex = 15;
             this.textBoxBL.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(457, 189);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 49;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // CameraCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -653,8 +668,9 @@ namespace tarcza
         private System.Windows.Forms.ComboBox comboComPorts;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button buttonPauseAndSelect;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboGame;
         private System.Windows.Forms.Button captureButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 
