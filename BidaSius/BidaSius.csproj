@@ -84,6 +84,12 @@
     <Compile Include="NakedPic.Designer.cs">
       <DependentUpon>NakedPic.cs</DependentUpon>
     </Compile>
+    <Compile Include="PlayTenSeries.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PlayTenSeries.Designer.cs">
+      <DependentUpon>PlayTenSeries.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeriesRow.cs">
@@ -108,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="NakedPic.resx">
       <DependentUpon>NakedPic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayTenSeries.resx">
+      <DependentUpon>PlayTenSeries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

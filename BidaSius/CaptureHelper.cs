@@ -55,6 +55,13 @@ namespace BidaSius
         Play
     }
 
+    public enum Games
+    {
+        Normal,
+        Naked,
+        TenSeries
+    }
+
     [Serializable]
     public class TargetDetails
     {

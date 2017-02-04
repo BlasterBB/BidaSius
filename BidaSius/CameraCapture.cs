@@ -26,6 +26,7 @@ namespace tarcza
 
         public Form MainF { get; set; }
         public Form NakedF { get; set; }
+        public Form TenSeriesF { get; set; }
         private Capture _capture = null;
         private bool _captureInProgress;
         delegate void SkonczonyPrzepierdalanie(ProcessFrameResult result);
@@ -75,8 +76,8 @@ namespace tarcza
             CvInvoke.UseOpenCL = false;
             ReadSettings();
             FillComPorts();
-            My_Timer.Interval = 5000 ;
-            My_Timer.Tick += new EventHandler((sender, args) => {System.GC.Collect(); });
+            My_Timer.Interval = 5000;
+            My_Timer.Tick += new EventHandler((sender, args) => { System.GC.Collect(); });
             My_Timer.Start();
 
         }
@@ -387,8 +388,8 @@ namespace tarcza
                         }
                         break;
                     case BidaSiusState.Play:
-                       Play(result);
-                       
+                        Play(result);
+
 
                         break;
                     default:
@@ -435,10 +436,35 @@ namespace tarcza
             }
         }
 
-        private void Play(ProcessFrameResult result)
+        #region Play Types
+
+        private void PlayNormal(ProcessFrameResult result)
         {
-            if ((string) comboGame.SelectedItem == "naked")
+            if (MainF == null)
+                MainF = new MainForm();
+
+            MainForm mf = (MainForm)MainF;
+            if (!mf.IsAccessible)
+                mf.Show();
+
+            if (mf != null && result.Shot != null)
             {
+                var lastshot = mf.Shots.LastOrDefault();
+                alreadyManual = false;
+                useManualShotPositiong = false;
+                buttonPauseAndSelect.Enabled = true;
+                if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                    return;
+                mf.Shots.Add(result.Shot);
+                result.TargetScanWithResult?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" +
+                                                  DateTime.Now.Ticks.ToString() + ".jpg");
+                result.Warped?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() +
+                                    "_oryg.jpg");
+                //MessageBox.Show("zarejestrowane " + result.shot.Value.ToString());
+                //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
+                ScrollPaper();
+                mf.RefreshTarget();
+
                 if (result.TargetScanWithResult != null)
                 {
                     using (Mat mm = result.TargetScanWithResult.Clone())
@@ -447,66 +473,77 @@ namespace tarcza
                     }
                 }
 
-                if (result.Shot != null)
+            }
+        }
+
+        private void PlayNaked(ProcessFrameResult result)
+        {
+            if (result.TargetScanWithResult != null)
+            {
+                using (Mat mm = result.TargetScanWithResult.Clone())
                 {
-                    if (NakedF == null)
-                        NakedF = new NakedPic();
-
-                    NakedPic np = (NakedPic)NakedF;
-                    if (!NakedF.IsAccessible)
-                        NakedF.Show();
-
-                    var lastshot = np.Shots.LastOrDefault();
-                    alreadyManual = false;
-                    useManualShotPositiong = false;
-                    buttonPauseAndSelect.Enabled = true;
-                    if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
-                        return;
-                    np.Shots.Add(result.Shot);
-
-                    if (result.Shot.Value > 8.1)
-                        ((NakedPic)NakedF).HideOneTile();
-                    else
-                        ((NakedPic)NakedF).Missed();
-
+                    nw.setImage(mm.Bitmap);
                 }
             }
-            else
+
+            if (result.Shot != null)
             {
-                if (MainF == null)
-                    MainF = new MainForm();
+                if (NakedF == null)
+                    NakedF = new NakedPic();
 
-                MainForm mf = (MainForm) MainF;
-                if (!mf.IsAccessible)
-                    mf.Show();
+                NakedPic np = (NakedPic)NakedF;
+                if (!NakedF.IsAccessible)
+                    NakedF.Show();
 
-                if (mf != null && result.Shot != null)
-                {
-                    var lastshot = mf.Shots.LastOrDefault();
-                    alreadyManual = false;
-                    useManualShotPositiong = false;
-                    buttonPauseAndSelect.Enabled = true;
-                    if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
-                        return;
-                    mf.Shots.Add(result.Shot);
-                    result.TargetScanWithResult?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" +
-                                                      DateTime.Now.Ticks.ToString() + ".jpg");
-                    result.Warped?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() +
-                                        "_oryg.jpg");
-                    //MessageBox.Show("zarejestrowane " + result.shot.Value.ToString());
-                    //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
-                    ScrollPaper();
-                    mf.RefreshTarget();
+                var lastshot = np.Shots.LastOrDefault();
+                alreadyManual = false;
+                useManualShotPositiong = false;
+                buttonPauseAndSelect.Enabled = true;
+                if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                    return;
+                np.Shots.Add(result.Shot);
 
-                    if (result.TargetScanWithResult != null)
-                    {
-                        using (Mat mm = result.TargetScanWithResult.Clone())
-                        {
-                            nw.setImage(mm.Bitmap);
-                        }
-                    }
+                if (result.Shot.Value > 8.1)
+                    ((NakedPic)NakedF).HideOneTile();
+                else
+                    ((NakedPic)NakedF).Missed();
 
-                }
+            }
+        }
+
+        private void PlayTenSeries(ProcessFrameResult result)
+        {
+            PlayTenSeries np = (PlayTenSeries)TenSeriesF;
+            if (!TenSeriesF.IsAccessible)
+                TenSeriesF.Show();
+
+            var lastshot = np.Shots.LastOrDefault();
+
+           // if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+            //    return;
+            np.Shots.Add(result.Shot);
+
+            np.pach();
+        }
+
+        #endregion play types
+
+
+        private void Play(ProcessFrameResult result)
+        {
+            switch ((string)comboGame.SelectedItem)
+            {
+                case "naked":
+                    PlayNaked(result);
+                    break;
+
+                case "normal":
+                    PlayNormal(result);
+                    break;
+
+                case "TenSeries":
+                    PlayTenSeries(result);
+                    break;
             }
         }
 
@@ -642,7 +679,53 @@ namespace tarcza
         {
             //NakedPic nn = new NakedPic();
             //nn.Show();
-            ((NakedPic)NakedF).HideOneTile();
+            // ((NakedPic)NakedF).HideOneTile();
+
+            ProcessFrameResult result = new ProcessFrameResult();
+            result.Shot = new Shot { No = 1, Value = 10.9, Time = DateTime.Now.Ticks, PointFromCenter = new Point { X = 5, Y = 5 } };
+
+
+            Play(result);
+
+
+
+
+        }
+
+        private void comboGame_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch ((string)comboGame.SelectedItem)
+            {
+                case "naked":
+                    break;
+
+                case "normal":
+                  
+                    break;
+
+                case "TenSeries":
+                    if (TenSeriesF == null)
+                        TenSeriesF = new PlayTenSeries();
+
+                    PlayTenSeries np = (PlayTenSeries)TenSeriesF;
+                    if (!TenSeriesF.IsAccessible)
+                        TenSeriesF.Show();
+                    break;
+            }
+        }
+
+        private void HideAllPlay()
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ProcessFrameResult result = new ProcessFrameResult();
+            result.Shot = new Shot { No = 1, Value = 9.9, Time = DateTime.Now.Ticks, PointFromCenter = new Point { X = 5, Y = 5 } };
+
+
+            Play(result);
         }
     }
 
