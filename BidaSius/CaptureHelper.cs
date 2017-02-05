@@ -44,7 +44,6 @@ namespace BidaSius
         public int firstCannyThresh1 { get; set; }
         public int secondCannyThresh1 { get; set; }
         public BidaSiusState CurrentState { get; set; }
-
     }
 
     public enum BidaSiusState
@@ -72,6 +71,8 @@ namespace BidaSius
         public double BlackR { get; set; }
         public Point BlackCenter { get; set; }
         public PointF[] TargetRect { get; set; }
+        public bool CameraOnTop { get; set; }
+        public bool CameraFlipped { get; set; }
     }
 
     public static class CaptureHelper
@@ -142,7 +143,7 @@ namespace BidaSius
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
+
             return result;
 
 
@@ -249,9 +250,9 @@ namespace BidaSius
 
 
                 #region test
-                
+
                 CvInvoke.Canny(smoothedGrayFrame12, canny_output12, acd.FirstCannyThresh, acd.secondCannyThresh);
-               
+
                 #endregion test
 
                 #endregion blur gray canny samej tarczy
@@ -328,7 +329,7 @@ namespace BidaSius
 
             #region test
             //#######test
-           
+
             //                   double otsu_thresh_val12 = CvInvoke.Threshold(smoothedGrayFrame12, fake12, firstCannyThresh, secondCannyThresh, ThresholdType.Binary & ThresholdType.Otsu);
             //CvInvoke.AdaptiveThreshold(smoothedGrayFrame12, fake12, 255, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 3, 2);
             //1CvInvoke.GaussianBlur(fake12, fake12, new Size(9, 9), 1, 1);
@@ -350,14 +351,14 @@ namespace BidaSius
             // CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(11, 11), 1, 1);
             //    CvInvoke.GaussianBlur(canny_output12, canny_output12, new Size(7, 7), 1, 1);
 
-           // result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-                                                      //#######test
+            // result.WarpedTargetCanny = canny_output12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+            //#######test
             #endregion test
 
             #endregion blur gray canny samej tarczy
 
 
-           // result.SmOryCanny = smoothedGrayFrame12;
+            // result.SmOryCanny = smoothedGrayFrame12;
 
             #endregion  hocki klocki przepierdalanie obrazu
 
@@ -446,6 +447,9 @@ namespace BidaSius
             double wartosc = 0;
             Shot sh = new Shot();
             double pix = Pix(targetDet.BlackR);
+
+
+
             Point shotCenter = Point.Round(shotPoint);
             var diffX = shotCenter.X - targetDet.BlackCenter.X;
             var diffY = shotCenter.Y - targetDet.BlackCenter.Y;
@@ -462,7 +466,12 @@ namespace BidaSius
 
             //  Point strzalObliczonyOdSrodka = new Point(center.X + diffX, center.Y + diffY);
 
-            Point strzalObliczonyOdSrodkaPix = new Point(Convert.ToInt32(diffX * pix), Convert.ToInt32(diffY * pix));
+            Point strzalObliczonyOdSrodkaPix;
+            if (targetDet.CameraFlipped)
+                strzalObliczonyOdSrodkaPix = new Point(-Convert.ToInt32(diffX * pix), -Convert.ToInt32(diffY * pix));
+            else
+                strzalObliczonyOdSrodkaPix = new Point(Convert.ToInt32(diffX * pix), Convert.ToInt32(diffY * pix));
+
             sh.PointFromCenter = strzalObliczonyOdSrodkaPix;
 
             //sprawdzenie wartości strzału
@@ -567,7 +576,7 @@ namespace BidaSius
                  new PointF(kwadratWidth, kwadratWidth),//br
                  new PointF(0, kwadratWidth)};//bl
 
-           
+
             #endregion wyznaczenie prostokatow i kwadratow do transformacji perspektywy
 
             #region tranformacja perspektywy

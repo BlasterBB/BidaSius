@@ -44,29 +44,10 @@ namespace tarcza
 
 
 
-
-
-
-
-
         Timer My_Timer = new Timer();
         int FPS = 30;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
 
         #region public 
 
@@ -109,7 +90,6 @@ namespace tarcza
                     threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
                     threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
                     threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
-
                 }
                 else
                 {
@@ -225,6 +205,10 @@ namespace tarcza
 
             td.BlackR = (int)numBLCKradius.Value;
             td.BlackCenter = new Point((int)numBLCx.Value, (int)numBLCy.Value);
+            td.CameraFlipped = checkBoxCameraFlipped.Checked;
+            td.CameraOnTop = checkBoxCameraOnTop.Checked;
+
+
             useThisTarget = td;
 
 
@@ -304,6 +288,9 @@ namespace tarcza
             numBLCKradius.Value = (int)td.BlackR;
             numBLCx.Value = td.BlackCenter.X;
             numBLCy.Value = td.BlackCenter.Y;
+
+            checkBoxCameraFlipped.Checked = td.CameraFlipped;
+            checkBoxCameraOnTop.Checked = td.CameraOnTop;
         }
 
         private void InitCamera()
@@ -502,7 +489,7 @@ namespace tarcza
                 if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
                     return;
                 np.Shots.Add(result.Shot);
-
+                ScrollPaper();
                 if (result.Shot.Value > 8.1)
                     ((NakedPic)NakedF).HideOneTile();
                 else
@@ -519,8 +506,9 @@ namespace tarcza
 
             var lastshot = np.Shots.LastOrDefault();
 
-           // if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
-            //    return;
+            if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                return;
+            ScrollPaper();
             np.Shots.Add(result.Shot);
 
             np.pach();

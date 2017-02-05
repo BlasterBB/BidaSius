@@ -32,6 +32,7 @@ namespace tarcza
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.captureButton = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -73,7 +74,8 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
-            this.button2 = new System.Windows.Forms.Button();
+            this.checkBoxCameraOnTop = new System.Windows.Forms.CheckBox();
+            this.checkBoxCameraFlipped = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -140,6 +142,16 @@ namespace tarcza
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(481, 207);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 50;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -334,6 +346,8 @@ namespace tarcza
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.checkBoxCameraFlipped);
+            this.groupBox3.Controls.Add(this.checkBoxCameraOnTop);
             this.groupBox3.Controls.Add(this.lblCamNo);
             this.groupBox3.Controls.Add(this.numericCameraNo);
             this.groupBox3.Location = new System.Drawing.Point(8, 6);
@@ -346,7 +360,7 @@ namespace tarcza
             // lblCamNo
             // 
             this.lblCamNo.AutoSize = true;
-            this.lblCamNo.Location = new System.Drawing.Point(11, 21);
+            this.lblCamNo.Location = new System.Drawing.Point(11, 17);
             this.lblCamNo.Name = "lblCamNo";
             this.lblCamNo.Size = new System.Drawing.Size(83, 13);
             this.lblCamNo.TabIndex = 33;
@@ -354,7 +368,7 @@ namespace tarcza
             // 
             // numericCameraNo
             // 
-            this.numericCameraNo.Location = new System.Drawing.Point(100, 19);
+            this.numericCameraNo.Location = new System.Drawing.Point(100, 15);
             this.numericCameraNo.Name = "numericCameraNo";
             this.numericCameraNo.Size = new System.Drawing.Size(42, 20);
             this.numericCameraNo.TabIndex = 32;
@@ -587,15 +601,27 @@ namespace tarcza
             this.textBoxBL.TabIndex = 15;
             this.textBoxBL.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
             // 
-            // button2
+            // checkBoxCameraOnTop
             // 
-            this.button2.Location = new System.Drawing.Point(481, 207);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 50;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.checkBoxCameraOnTop.AutoSize = true;
+            this.checkBoxCameraOnTop.Location = new System.Drawing.Point(14, 38);
+            this.checkBoxCameraOnTop.Name = "checkBoxCameraOnTop";
+            this.checkBoxCameraOnTop.Size = new System.Drawing.Size(95, 17);
+            this.checkBoxCameraOnTop.TabIndex = 34;
+            this.checkBoxCameraOnTop.Text = "Camera on top";
+            this.checkBoxCameraOnTop.UseVisualStyleBackColor = true;
+            this.checkBoxCameraOnTop.CheckedChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            // 
+            // checkBoxCameraFlipped
+            // 
+            this.checkBoxCameraFlipped.AutoSize = true;
+            this.checkBoxCameraFlipped.Location = new System.Drawing.Point(14, 53);
+            this.checkBoxCameraFlipped.Name = "checkBoxCameraFlipped";
+            this.checkBoxCameraFlipped.Size = new System.Drawing.Size(145, 17);
+            this.checkBoxCameraFlipped.TabIndex = 35;
+            this.checkBoxCameraFlipped.Text = "Camera flipped (upDown)";
+            this.checkBoxCameraFlipped.UseVisualStyleBackColor = true;
+            this.checkBoxCameraFlipped.CheckedChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
             // 
             // CameraCapture
             // 
@@ -686,6 +712,8 @@ namespace tarcza
         private System.Windows.Forms.Button captureButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBoxCameraFlipped;
+        private System.Windows.Forms.CheckBox checkBoxCameraOnTop;
     }
 }
 
