@@ -88,5 +88,12 @@ namespace BidaSius
             }
 
         }
+
+        private void buttonRemoveLast_Click(object sender, EventArgs e)
+        {
+            Shots.RemoveAt(Shots.Count() - 1);
+
+            pach();
+        }
     }
 }

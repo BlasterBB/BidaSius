@@ -13,9 +13,19 @@ namespace BidaSius
         public int No { get; set; }
         public String Czas { get { return new DateTime(Time).ToString("HH:mm:ss"); } }
 
+        public string TargetScanWithResultFileName { get; set; }
+        public string WarpedFileName { get; set; }
+
         public override string ToString()
         {
             return Value.ToString("N1");
+        }
+
+        internal void Update(Shot newShot)
+        {
+            Value = newShot.Value;
+            Length = newShot.Length;
+            PointFromCenter = newShot.PointFromCenter;
         }
     }
 }

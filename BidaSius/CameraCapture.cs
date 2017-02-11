@@ -31,8 +31,8 @@ namespace tarcza
         private bool _captureInProgress;
         delegate void SkonczonyPrzepierdalanie(ProcessFrameResult result);
         public int threshhhhh { get; set; }
-        private TargetDetails _useThisTarget = new TargetDetails();
-        public TargetDetails useThisTarget { get { return _useThisTarget; } set { _useThisTarget = value; } }
+        private TargetDetails bidaSiusSettings = new TargetDetails();
+        public TargetDetails BidaSiusSettings { get { return bidaSiusSettings; } set { bidaSiusSettings = value; } }
         bool captureRectFlag = false;
         public int pauseTimer = 0;
         public bool useManualShotPositiong = false;
@@ -40,14 +40,11 @@ namespace tarcza
         image nw = new image();
         public BidaSiusState CurrentState { get; set; }
 
-        #endregion
-
-
-
         Timer My_Timer = new Timer();
         int FPS = 30;
 
-        
+
+        #endregion
 
         #region public 
 
@@ -56,11 +53,12 @@ namespace tarcza
             InitializeComponent();
             CvInvoke.UseOpenCL = false;
             ReadSettings();
+            CreateOrClearImagesFolder();
             FillComPorts();
             My_Timer.Interval = 5000;
             My_Timer.Tick += new EventHandler((sender, args) => { System.GC.Collect(); });
             My_Timer.Start();
-
+            
         }
 
         #endregion
@@ -110,7 +108,7 @@ namespace tarcza
                         secondCannyThresh = threstwo,
                         firstCannyThresh1 = threshone1,
                         secondCannyThresh1 = threshtwo1,
-                        MainTargetDetails = useThisTarget
+                        MainTargetDetails = BidaSiusSettings
                     };
                     result = CaptureHelper.ProcessFrame(acd);
                     //UstawRezultat(result);
@@ -120,7 +118,7 @@ namespace tarcza
                 else if (useManualShotPositiong && !alreadyManual)
                 {
                     alreadyManual = true;
-                    result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+                    result = CaptureHelper.ManualProcessFrame(frame, threshOne, threstwo, threshone1, threshtwo1, BidaSiusSettings);
                 }
                 else
                     return;
@@ -163,7 +161,7 @@ namespace tarcza
 
 
 
-            var result = CaptureHelper.ProcessFromFile(frame, threshOne, threstwo, threshone1, threshtwo1, useThisTarget);
+            var result = CaptureHelper.ProcessFromFile(frame, threshOne, threstwo, threshone1, threshtwo1, BidaSiusSettings);
             UstawRezultat(result);
             //imageBox1.Image = result.TargetScanWithResult;
             //  imageBox2.Image = result.TargetMarked;
@@ -188,7 +186,8 @@ namespace tarcza
             myPort.Close();
         }
 
-        private void GetTargetRect()
+        #region settings
+        private void ReadSettingFromGui()
         {
             TargetDetails td = new TargetDetails();
             td.TL = new Point((int)textBoxTLX.Value, (int)textBoxTL.Value);
@@ -207,9 +206,9 @@ namespace tarcza
             td.BlackCenter = new Point((int)numBLCx.Value, (int)numBLCy.Value);
             td.CameraFlipped = checkBoxCameraFlipped.Checked;
             td.CameraOnTop = checkBoxCameraOnTop.Checked;
+            td.IgnoreWhiteShots = checkBoxIgnoreWhiteShots.Checked;
 
-
-            useThisTarget = td;
+            BidaSiusSettings = td;
 
 
             SaveSettings(td);
@@ -266,7 +265,7 @@ namespace tarcza
             }
             stream.Close();
             SaveSettings(td);
-            useThisTarget = td;
+            BidaSiusSettings = td;
             FillSettingsToGui(td);
 
         }
@@ -291,7 +290,15 @@ namespace tarcza
 
             checkBoxCameraFlipped.Checked = td.CameraFlipped;
             checkBoxCameraOnTop.Checked = td.CameraOnTop;
+            checkBoxIgnoreWhiteShots.Checked = td.IgnoreWhiteShots;
+
+            trackThreshOne_ValueChanged(null, null);
+            trackthresh3_ValueChanged(null, null);
+            trackthresh4_ValueChanged(null, null);
+            trackthreshTwo_ValueChanged(null, null);
         }
+        #endregion settings
+
 
         private void InitCamera()
         {
@@ -319,7 +326,7 @@ namespace tarcza
                 //// Initialize the Left Camera Frame Capture Timer...
                 //Application.Idle += new EventHandler(ProcessFrame);
                 // var mm = LeftCameraImageCapture.QueryFrame();
-                Ustawienia = true;
+                // Ustawienia = true;
                 //   CurrentState = BidaSiusState.SetTargetBoundries;
 
             }
@@ -329,8 +336,8 @@ namespace tarcza
             }
         }
 
-        public bool Ustawienia { get; set; }
-        private Mat blbal;
+        // public bool Ustawienia { get; set; }
+
         private void UstawRezultat(ProcessFrameResult result)
         {
             // InvokeRequired required compares the thread ID of the
@@ -347,13 +354,6 @@ namespace tarcza
                 {
                     FillSettingsToGui(result.Target);
                 }
-
-                //captureImageBox.Image = result.Oryginal;
-                //grayscaleImageBox.Image = result.SmoothedOryginal;
-                //cannyImageBox.Image = result.SmOryCanny;
-                //smoothedGrayscaleImageBox.Image = result.FoundKontur;
-                // testPB.Image = result.TargetMarked.ToImage<>()
-
                 switch (CurrentState)
                 {
                     case BidaSiusState.Start:
@@ -383,43 +383,6 @@ namespace tarcza
                         throw new ArgumentOutOfRangeException();
                 }
 
-
-
-                //Mat mm1 = new Mat();
-                //using (mm1= result.TargetScanWithResult.Clone())
-                //{
-                //    imageBox4.Image = mm1;
-
-                //    imageBox4.Refresh();
-                //}
-
-
-
-                // imageBox1.SetZoomScale(0.4, new Point(0,0));
-                // sd = result.TargetMarked.Clone().Bitmap;
-                // sd = result.TargetMarked.Clone().Bitmap;
-
-
-
-
-                // imageBox1.Refresh();
-                //      result.TargetMarked.Dispose();
-                //   imageBox2.Image = result.Warped;
-                //   imageBox3.Image = result.WarpedTargetCanny;
-                if (Ustawienia)
-                {
-                    //blbal = result.TargetMarked.Clone();
-                    // imageBox1.Image = blbal;
-
-                    //imageBox4.Image = result.TargetScanWithResult.Clone();
-
-                    //System.GC.Collect();
-                }
-                //  result.TargetMarked.Dispose();
-                //result.TargetScanWithResult?.Dispose();
-
-
-
             }
         }
 
@@ -428,8 +391,10 @@ namespace tarcza
         private void PlayNormal(ProcessFrameResult result)
         {
             if (MainF == null)
-                MainF = new MainForm();
-
+            {
+                MainF = new MainForm(BidaSiusSettings);
+              //  MainF.Parent = this;
+            }
             MainForm mf = (MainForm)MainF;
             if (!mf.IsAccessible)
                 mf.Show();
@@ -443,12 +408,14 @@ namespace tarcza
                 if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
                     return;
                 mf.Shots.Add(result.Shot);
-                result.TargetScanWithResult?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" +
-                                                  DateTime.Now.Ticks.ToString() + ".jpg");
-                result.Warped?.Save("C:\\Users\\mjordanek\\Desktop\\imagesSius\\" + DateTime.Now.Ticks.ToString() +
-                                    "_oryg.jpg");
-                //MessageBox.Show("zarejestrowane " + result.shot.Value.ToString());
-                //  DialogResult result1 = MessageBox.Show("zarejestrowane " + result.shot.Value.ToString(), "czekaj", MessageBoxButtons.YesNo);
+
+
+                var ticks = DateTime.Now.Ticks.ToString();
+                result.Shot.TargetScanWithResultFileName =  ticks + ".jpg";
+                result.Shot.WarpedFileName = ticks + "_oryg.jpg";
+                result.TargetScanWithResult?.Save(BidaSiusSettings.ImagesFolderPath + result.Shot.TargetScanWithResultFileName);
+                result.Warped?.Save(BidaSiusSettings.ImagesFolderPath + result.Shot.WarpedFileName);
+
                 ScrollPaper();
                 mf.RefreshTarget();
 
@@ -500,6 +467,13 @@ namespace tarcza
 
         private void PlayTenSeries(ProcessFrameResult result)
         {
+            if (result.Shot == null)
+                return;
+
+            alreadyManual = false;
+            useManualShotPositiong = false;
+            buttonPauseAndSelect.Enabled = true;
+
             PlayTenSeries np = (PlayTenSeries)TenSeriesF;
             if (!TenSeriesF.IsAccessible)
                 TenSeriesF.Show();
@@ -512,6 +486,16 @@ namespace tarcza
             np.Shots.Add(result.Shot);
 
             np.pach();
+
+
+
+            if (result.TargetScanWithResult != null)
+            {
+                using (Mat mm = result.TargetScanWithResult.Clone())
+                {
+                    nw.setImage(mm.Bitmap);
+                }
+            }
         }
 
         #endregion play types
@@ -519,6 +503,10 @@ namespace tarcza
 
         private void Play(ProcessFrameResult result)
         {
+            if (BidaSiusSettings.IgnoreWhiteShots && result.Shot != null && result.Shot.Value < 7)
+                return;
+
+
             switch ((string)comboGame.SelectedItem)
             {
                 case "naked":
@@ -540,6 +528,19 @@ namespace tarcza
             _capture?.Dispose();
         }
 
+        private void CreateOrClearImagesFolder()
+        {
+            BidaSiusSettings.ImagesFolderPath = Application.StartupPath + "\\SessionImages\\";
+            if (!Directory.Exists(BidaSiusSettings.ImagesFolderPath))
+                Directory.CreateDirectory(BidaSiusSettings.ImagesFolderPath);
+
+            System.IO.DirectoryInfo di = new DirectoryInfo(BidaSiusSettings.ImagesFolderPath);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+        }
         #endregion
 
         #region events
@@ -615,9 +616,9 @@ namespace tarcza
             //     ProcessFrame(null, null);
         }
 
-        private void textBoxTLX_ValueChanged(object sender, EventArgs e)
+        private void setting_ValueChanged(object sender, EventArgs e)
         {
-            GetTargetRect();
+            ReadSettingFromGui();
         }
 
         private void buttonTestCom_Click(object sender, EventArgs e)
@@ -644,8 +645,6 @@ namespace tarcza
         {
             ProcessFromFile();
         }
-
-        #endregion
 
         private void buttonPauseAndSelect_Click_1(object sender, EventArgs e)
         {
@@ -688,7 +687,7 @@ namespace tarcza
                     break;
 
                 case "normal":
-                  
+
                     break;
 
                 case "TenSeries":
@@ -702,11 +701,6 @@ namespace tarcza
             }
         }
 
-        private void HideAllPlay()
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             ProcessFrameResult result = new ProcessFrameResult();
@@ -715,6 +709,16 @@ namespace tarcza
 
             Play(result);
         }
+
+        private void buttonTestCom_Click_1(object sender, EventArgs e)
+        {
+            ScrollPaper();
+        }
+
+
+        #endregion
+
+
     }
 
 

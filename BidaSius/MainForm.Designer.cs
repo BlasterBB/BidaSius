@@ -33,7 +33,6 @@
             this.TargetIB = new Emgu.CV.UI.ImageBox();
             this.splitContainerData = new System.Windows.Forms.SplitContainer();
             this.chckShowAll = new System.Windows.Forms.CheckBox();
-            this.buttonSettings = new System.Windows.Forms.Button();
             this.buttonClean = new System.Windows.Forms.Button();
             this.buttonRemLast = new System.Windows.Forms.Button();
             this.labelSum = new System.Windows.Forms.Label();
@@ -41,10 +40,13 @@
             this.labSeries = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.flPanelSeries = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonRepairLast = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TargetIB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerData)).BeginInit();
             this.splitContainerData.Panel1.SuspendLayout();
             this.splitContainerData.Panel2.SuspendLayout();
             this.splitContainerData.SuspendLayout();
@@ -86,8 +88,8 @@
             // 
             // splitContainerData.Panel1
             // 
+            this.splitContainerData.Panel1.Controls.Add(this.buttonRepairLast);
             this.splitContainerData.Panel1.Controls.Add(this.chckShowAll);
-            this.splitContainerData.Panel1.Controls.Add(this.buttonSettings);
             this.splitContainerData.Panel1.Controls.Add(this.buttonClean);
             this.splitContainerData.Panel1.Controls.Add(this.buttonRemLast);
             // 
@@ -107,7 +109,7 @@
             this.chckShowAll.AutoSize = true;
             this.chckShowAll.Checked = true;
             this.chckShowAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chckShowAll.Location = new System.Drawing.Point(364, 8);
+            this.chckShowAll.Location = new System.Drawing.Point(633, 9);
             this.chckShowAll.Name = "chckShowAll";
             this.chckShowAll.Size = new System.Drawing.Size(138, 17);
             this.chckShowAll.TabIndex = 3;
@@ -115,19 +117,9 @@
             this.chckShowAll.UseVisualStyleBackColor = true;
             this.chckShowAll.CheckedChanged += new System.EventHandler(this.chckShowAll_CheckedChanged);
             // 
-            // buttonSettings
-            // 
-            this.buttonSettings.Location = new System.Drawing.Point(42, 3);
-            this.buttonSettings.Name = "buttonSettings";
-            this.buttonSettings.Size = new System.Drawing.Size(75, 23);
-            this.buttonSettings.TabIndex = 0;
-            this.buttonSettings.Text = "Ustawienia";
-            this.buttonSettings.UseVisualStyleBackColor = true;
-            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
-            // 
             // buttonClean
             // 
-            this.buttonClean.Location = new System.Drawing.Point(123, 3);
+            this.buttonClean.Location = new System.Drawing.Point(543, 7);
             this.buttonClean.Name = "buttonClean";
             this.buttonClean.Size = new System.Drawing.Size(75, 23);
             this.buttonClean.TabIndex = 1;
@@ -137,7 +129,7 @@
             // 
             // buttonRemLast
             // 
-            this.buttonRemLast.Location = new System.Drawing.Point(213, 3);
+            this.buttonRemLast.Location = new System.Drawing.Point(9, 7);
             this.buttonRemLast.Name = "buttonRemLast";
             this.buttonRemLast.Size = new System.Drawing.Size(75, 23);
             this.buttonRemLast.TabIndex = 2;
@@ -194,6 +186,16 @@
             this.flPanelSeries.TabIndex = 0;
             this.flPanelSeries.WrapContents = false;
             // 
+            // buttonRepairLast
+            // 
+            this.buttonRepairLast.Location = new System.Drawing.Point(90, 7);
+            this.buttonRepairLast.Name = "buttonRepairLast";
+            this.buttonRepairLast.Size = new System.Drawing.Size(97, 23);
+            this.buttonRepairLast.TabIndex = 4;
+            this.buttonRepairLast.Text = "Popraw ostatni";
+            this.buttonRepairLast.UseVisualStyleBackColor = true;
+            this.buttonRepairLast.Click += new System.EventHandler(this.buttonRepairLast_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,12 +206,14 @@
             this.Text = "MainForm";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TargetIB)).EndInit();
             this.splitContainerData.Panel1.ResumeLayout(false);
             this.splitContainerData.Panel1.PerformLayout();
             this.splitContainerData.Panel2.ResumeLayout(false);
             this.splitContainerData.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerData)).EndInit();
             this.splitContainerData.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -218,7 +222,6 @@
         #endregion
 
         private Emgu.CV.UI.ImageBox TargetIB;
-        private System.Windows.Forms.Button buttonSettings;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Button buttonClean;
         private System.Windows.Forms.Button buttonRemLast;
@@ -229,5 +232,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label labSeries;
         private System.Windows.Forms.CheckBox chckShowAll;
+        private System.Windows.Forms.Button buttonRepairLast;
     }
 }

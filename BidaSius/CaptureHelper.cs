@@ -20,7 +20,7 @@ namespace BidaSius
         public Mat WarpedTargetCanny { get; set; }
         public Mat TargetScanWithResult { get; set; }
         public TargetDetails Target { get; set; }
-
+        
         public void Dispose()
         {
             Oryginal?.Dispose();
@@ -73,6 +73,8 @@ namespace BidaSius
         public PointF[] TargetRect { get; set; }
         public bool CameraOnTop { get; set; }
         public bool CameraFlipped { get; set; }
+        public bool IgnoreWhiteShots { get; set; }
+        public string ImagesFolderPath { get; set; }
     }
 
     public static class CaptureHelper
@@ -271,6 +273,8 @@ namespace BidaSius
                     czteryIpolmmRInt - zapasSize,
                     czteryIpolmmRInt + zapasSize);
 
+                result.Warped = warped.Clone();//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
                 foreach (CircleF shot in przestrzeliny)
                 {
                     CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt, new Bgr(Color.Blue).MCvScalar, 1,
@@ -376,6 +380,13 @@ namespace BidaSius
 
         }
 
+        public static int GetCzteryIpolmmR_int(TargetDetails settings)
+        {
+            var pix = CaptureHelper.Pix(settings.BlackR);
+            return Convert.ToInt32(CaptureHelper.FourNHalfR(pix));
+
+        }
+
         private static double Pix(double radius)
         {
             double pix = sevenRing / (2 * radius);
@@ -384,7 +395,7 @@ namespace BidaSius
 
         #region get ring radius
 
-        private static double GetRingR(double pix, int ring)
+        public static double GetRingR(double pix, int ring)
         {
             double ringR = (ring / pix) / 2;
             return ringR;

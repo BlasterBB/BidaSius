@@ -36,6 +36,7 @@ namespace tarcza
             this.button1 = new System.Windows.Forms.Button();
             this.captureButton = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.checkBoxIgnoreWhiteShots = new System.Windows.Forms.CheckBox();
             this.comboGame = new System.Windows.Forms.ComboBox();
             this.buttonPauseAndSelect = new System.Windows.Forms.Button();
             this.trackThreshOne = new System.Windows.Forms.TrackBar();
@@ -54,6 +55,8 @@ namespace tarcza
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
             this.openFileButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.checkBoxCameraFlipped = new System.Windows.Forms.CheckBox();
+            this.checkBoxCameraOnTop = new System.Windows.Forms.CheckBox();
             this.lblCamNo = new System.Windows.Forms.Label();
             this.numericCameraNo = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -74,8 +77,6 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxCameraOnTop = new System.Windows.Forms.CheckBox();
-            this.checkBoxCameraFlipped = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -145,7 +146,7 @@ namespace tarcza
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(481, 207);
+            this.button2.Location = new System.Drawing.Point(489, 138);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 50;
@@ -155,7 +156,7 @@ namespace tarcza
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(486, 179);
+            this.button1.Location = new System.Drawing.Point(489, 88);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 49;
@@ -175,6 +176,7 @@ namespace tarcza
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.checkBoxIgnoreWhiteShots);
             this.groupBox4.Controls.Add(this.comboGame);
             this.groupBox4.Location = new System.Drawing.Point(193, 223);
             this.groupBox4.Name = "groupBox4";
@@ -184,6 +186,17 @@ namespace tarcza
             this.groupBox4.Text = "Trening";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
+            // checkBoxIgnoreWhiteShots
+            // 
+            this.checkBoxIgnoreWhiteShots.AutoSize = true;
+            this.checkBoxIgnoreWhiteShots.Location = new System.Drawing.Point(19, 47);
+            this.checkBoxIgnoreWhiteShots.Name = "checkBoxIgnoreWhiteShots";
+            this.checkBoxIgnoreWhiteShots.Size = new System.Drawing.Size(123, 17);
+            this.checkBoxIgnoreWhiteShots.TabIndex = 35;
+            this.checkBoxIgnoreWhiteShots.Text = "Ignore shots in white";
+            this.checkBoxIgnoreWhiteShots.UseVisualStyleBackColor = true;
+            this.checkBoxIgnoreWhiteShots.CheckedChanged += new System.EventHandler(this.setting_ValueChanged);
+            // 
             // comboGame
             // 
             this.comboGame.FormattingEnabled = true;
@@ -191,7 +204,7 @@ namespace tarcza
             "naked",
             "normal",
             "TenSeries"});
-            this.comboGame.Location = new System.Drawing.Point(19, 24);
+            this.comboGame.Location = new System.Drawing.Point(19, 19);
             this.comboGame.Name = "comboGame";
             this.comboGame.Size = new System.Drawing.Size(121, 21);
             this.comboGame.TabIndex = 0;
@@ -215,6 +228,7 @@ namespace tarcza
             this.trackThreshOne.Size = new System.Drawing.Size(172, 45);
             this.trackThreshOne.TabIndex = 38;
             this.trackThreshOne.Value = 100;
+            this.trackThreshOne.ValueChanged += new System.EventHandler(this.trackThreshOne_ValueChanged);
             // 
             // trackthreshTwo
             // 
@@ -224,6 +238,7 @@ namespace tarcza
             this.trackthreshTwo.Size = new System.Drawing.Size(172, 45);
             this.trackthreshTwo.TabIndex = 40;
             this.trackthreshTwo.Value = 60;
+            this.trackthreshTwo.ValueChanged += new System.EventHandler(this.trackthreshTwo_ValueChanged);
             // 
             // trackthresh4
             // 
@@ -233,6 +248,7 @@ namespace tarcza
             this.trackthresh4.Size = new System.Drawing.Size(172, 45);
             this.trackthresh4.TabIndex = 41;
             this.trackthresh4.Value = 18;
+            this.trackthresh4.ValueChanged += new System.EventHandler(this.trackthresh4_ValueChanged);
             // 
             // trackthresh3
             // 
@@ -242,6 +258,7 @@ namespace tarcza
             this.trackthresh3.Size = new System.Drawing.Size(172, 45);
             this.trackthresh3.TabIndex = 39;
             this.trackthresh3.Value = 30;
+            this.trackthresh3.ValueChanged += new System.EventHandler(this.trackthresh3_ValueChanged);
             // 
             // label12
             // 
@@ -299,6 +316,7 @@ namespace tarcza
             this.buttonTestCom.TabIndex = 11;
             this.buttonTestCom.Text = "Test Scroll";
             this.buttonTestCom.UseVisualStyleBackColor = true;
+            this.buttonTestCom.Click += new System.EventHandler(this.buttonTestCom_Click_1);
             // 
             // label19
             // 
@@ -357,6 +375,28 @@ namespace tarcza
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Camera";
             // 
+            // checkBoxCameraFlipped
+            // 
+            this.checkBoxCameraFlipped.AutoSize = true;
+            this.checkBoxCameraFlipped.Location = new System.Drawing.Point(14, 53);
+            this.checkBoxCameraFlipped.Name = "checkBoxCameraFlipped";
+            this.checkBoxCameraFlipped.Size = new System.Drawing.Size(145, 17);
+            this.checkBoxCameraFlipped.TabIndex = 35;
+            this.checkBoxCameraFlipped.Text = "Camera flipped (upDown)";
+            this.checkBoxCameraFlipped.UseVisualStyleBackColor = true;
+            this.checkBoxCameraFlipped.CheckedChanged += new System.EventHandler(this.setting_ValueChanged);
+            // 
+            // checkBoxCameraOnTop
+            // 
+            this.checkBoxCameraOnTop.AutoSize = true;
+            this.checkBoxCameraOnTop.Location = new System.Drawing.Point(14, 38);
+            this.checkBoxCameraOnTop.Name = "checkBoxCameraOnTop";
+            this.checkBoxCameraOnTop.Size = new System.Drawing.Size(95, 17);
+            this.checkBoxCameraOnTop.TabIndex = 34;
+            this.checkBoxCameraOnTop.Text = "Camera on top";
+            this.checkBoxCameraOnTop.UseVisualStyleBackColor = true;
+            this.checkBoxCameraOnTop.CheckedChanged += new System.EventHandler(this.setting_ValueChanged);
+            // 
             // lblCamNo
             // 
             this.lblCamNo.AutoSize = true;
@@ -397,7 +437,7 @@ namespace tarcza
             this.groupBox1.Controls.Add(this.textBoxBR);
             this.groupBox1.Controls.Add(this.textBoxTLX);
             this.groupBox1.Controls.Add(this.textBoxBL);
-            this.groupBox1.Location = new System.Drawing.Point(8, 88);
+            this.groupBox1.Location = new System.Drawing.Point(8, 90);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(300, 128);
             this.groupBox1.TabIndex = 22;
@@ -433,7 +473,7 @@ namespace tarcza
             this.numBLCx.Name = "numBLCx";
             this.numBLCx.Size = new System.Drawing.Size(50, 20);
             this.numBLCx.TabIndex = 27;
-            this.numBLCx.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.numBLCx.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // numBLCy
             // 
@@ -446,7 +486,7 @@ namespace tarcza
             this.numBLCy.Name = "numBLCy";
             this.numBLCy.Size = new System.Drawing.Size(50, 20);
             this.numBLCy.TabIndex = 26;
-            this.numBLCy.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.numBLCy.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // numBLCKradius
             // 
@@ -459,7 +499,7 @@ namespace tarcza
             this.numBLCKradius.Name = "numBLCKradius";
             this.numBLCKradius.Size = new System.Drawing.Size(50, 20);
             this.numBLCKradius.TabIndex = 25;
-            this.numBLCKradius.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.numBLCKradius.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // label16
             // 
@@ -508,7 +548,7 @@ namespace tarcza
             this.textBoxBLX.Name = "textBoxBLX";
             this.textBoxBLX.Size = new System.Drawing.Size(50, 20);
             this.textBoxBLX.TabIndex = 19;
-            this.textBoxBLX.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxBLX.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxTL
             // 
@@ -521,7 +561,7 @@ namespace tarcza
             this.textBoxTL.Name = "textBoxTL";
             this.textBoxTL.Size = new System.Drawing.Size(50, 20);
             this.textBoxTL.TabIndex = 12;
-            this.textBoxTL.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxTL.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxBRX
             // 
@@ -534,7 +574,7 @@ namespace tarcza
             this.textBoxBRX.Name = "textBoxBRX";
             this.textBoxBRX.Size = new System.Drawing.Size(50, 20);
             this.textBoxBRX.TabIndex = 18;
-            this.textBoxBRX.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxBRX.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxTR
             // 
@@ -547,7 +587,7 @@ namespace tarcza
             this.textBoxTR.Name = "textBoxTR";
             this.textBoxTR.Size = new System.Drawing.Size(50, 20);
             this.textBoxTR.TabIndex = 13;
-            this.textBoxTR.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxTR.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxTRX
             // 
@@ -560,7 +600,7 @@ namespace tarcza
             this.textBoxTRX.Name = "textBoxTRX";
             this.textBoxTRX.Size = new System.Drawing.Size(50, 20);
             this.textBoxTRX.TabIndex = 17;
-            this.textBoxTRX.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxTRX.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxBR
             // 
@@ -573,7 +613,7 @@ namespace tarcza
             this.textBoxBR.Name = "textBoxBR";
             this.textBoxBR.Size = new System.Drawing.Size(50, 20);
             this.textBoxBR.TabIndex = 14;
-            this.textBoxBR.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxBR.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxTLX
             // 
@@ -586,7 +626,7 @@ namespace tarcza
             this.textBoxTLX.Name = "textBoxTLX";
             this.textBoxTLX.Size = new System.Drawing.Size(50, 20);
             this.textBoxTLX.TabIndex = 16;
-            this.textBoxTLX.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxTLX.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // textBoxBL
             // 
@@ -599,29 +639,7 @@ namespace tarcza
             this.textBoxBL.Name = "textBoxBL";
             this.textBoxBL.Size = new System.Drawing.Size(50, 20);
             this.textBoxBL.TabIndex = 15;
-            this.textBoxBL.ValueChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
-            // 
-            // checkBoxCameraOnTop
-            // 
-            this.checkBoxCameraOnTop.AutoSize = true;
-            this.checkBoxCameraOnTop.Location = new System.Drawing.Point(14, 38);
-            this.checkBoxCameraOnTop.Name = "checkBoxCameraOnTop";
-            this.checkBoxCameraOnTop.Size = new System.Drawing.Size(95, 17);
-            this.checkBoxCameraOnTop.TabIndex = 34;
-            this.checkBoxCameraOnTop.Text = "Camera on top";
-            this.checkBoxCameraOnTop.UseVisualStyleBackColor = true;
-            this.checkBoxCameraOnTop.CheckedChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
-            // 
-            // checkBoxCameraFlipped
-            // 
-            this.checkBoxCameraFlipped.AutoSize = true;
-            this.checkBoxCameraFlipped.Location = new System.Drawing.Point(14, 53);
-            this.checkBoxCameraFlipped.Name = "checkBoxCameraFlipped";
-            this.checkBoxCameraFlipped.Size = new System.Drawing.Size(145, 17);
-            this.checkBoxCameraFlipped.TabIndex = 35;
-            this.checkBoxCameraFlipped.Text = "Camera flipped (upDown)";
-            this.checkBoxCameraFlipped.UseVisualStyleBackColor = true;
-            this.checkBoxCameraFlipped.CheckedChanged += new System.EventHandler(this.textBoxTLX_ValueChanged);
+            this.textBoxBL.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
             // CameraCapture
             // 
@@ -638,6 +656,7 @@ namespace tarcza
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackThreshOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthreshTwo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackthresh4)).EndInit();
@@ -714,6 +733,7 @@ namespace tarcza
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox checkBoxCameraFlipped;
         private System.Windows.Forms.CheckBox checkBoxCameraOnTop;
+        private System.Windows.Forms.CheckBox checkBoxIgnoreWhiteShots;
     }
 }
 

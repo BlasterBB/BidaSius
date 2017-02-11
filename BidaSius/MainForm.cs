@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using tarcza;
@@ -10,11 +13,12 @@ namespace BidaSius
     public partial class MainForm : Form
     {
         public List<Shot> Shots = new List<Shot>();
+        private TargetDetails bidaSiusSettings;
 
-
-        public MainForm()
+        public MainForm(TargetDetails settings)
         {
             InitializeComponent();
+            bidaSiusSettings = settings;
             Shots.Add(new Shot { No = 1, Value = 10.9, Time = DateTime.Now.Ticks, PointFromCenter = new Point { X = 5, Y = 5 } });
             Shots.Add(new Shot { No = 1, Value = 10.5, Time = DateTime.Now.Ticks + 1, PointFromCenter = new Point { X = 15, Y = 15 } });
             Shots.Add(new Shot { No = 1, Value = 9.9, Time = DateTime.Now.Ticks + 2, PointFromCenter = new Point { X = 21, Y = 35 } });
@@ -49,7 +53,7 @@ namespace BidaSius
             Shots.Add(new Shot { No = 1, Value = 8, Time = DateTime.Now.Ticks + 150, PointFromCenter = new Point { X = 20, Y = 55 } });
             Shots.Add(new Shot { No = 1, Value = 9.7, Time = DateTime.Now.Ticks + 140, PointFromCenter = new Point { X = 10, Y = 32 } });
 
-         //   flPanelSeries.Controls.Add(new testUC());
+            //   flPanelSeries.Controls.Add(new testUC());
 
 
             RefreshTarget();
@@ -163,6 +167,11 @@ namespace BidaSius
 
         private void buttonClean_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show("Czy napewno usunąć wszystko ? ", "Ostrzeżenie", MessageBoxButtons.OKCancel);
+
+            if (result == DialogResult.Cancel)
+                return;
+
             Shots.Clear();
             flPanelSeries.Controls.Clear();
             labSeries.Text = string.Empty;
@@ -179,6 +188,33 @@ namespace BidaSius
             Shots.RemoveAt(Shots.Count() - 1);
 
             RefreshTarget();
+        }
+
+        private void buttonRepairLast_Click(object sender, EventArgs e)
+        {
+            var last = Shots.Last();
+            Mat frame = new Mat();
+            if (string.IsNullOrWhiteSpace(last.WarpedFileName))
+                return;
+
+            string filePath = bidaSiusSettings.ImagesFolderPath +  last.WarpedFileName;
+            if (!File.Exists(filePath))
+                return;
+            
+            Image<Bgr, Byte> ff;
+            using (ff = new Image<Bgr, byte>(filePath))//.Resize(400, 400, Emgu.CV.CvEnum.Inter.Linear, true);
+            {
+                frame = ff.Mat;
+                int czteryIpolmmR_int = CaptureHelper.GetCzteryIpolmmR_int(bidaSiusSettings);
+
+                //odpal manualne pozycjonowanie 
+                ManualShotPositioning msp = new ManualShotPositioning();
+                msp.SetTargetAndShot(frame, czteryIpolmmR_int, bidaSiusSettings);
+                DialogResult dr = msp.ShowDialog();
+                var newShot = CaptureHelper.WyliczWartoscPrzestrzeliny(msp.SelectedPoint, bidaSiusSettings);
+                last.Update(newShot);
+                RefreshTarget();
+            }
         }
     }
 }
