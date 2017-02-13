@@ -20,7 +20,7 @@ namespace BidaSius
         public Mat WarpedTargetCanny { get; set; }
         public Mat TargetScanWithResult { get; set; }
         public TargetDetails Target { get; set; }
-        
+
         public void Dispose()
         {
             Oryginal?.Dispose();
@@ -248,7 +248,7 @@ namespace BidaSius
                 CvInvoke.PyrUp(smallGrayFrame12, smoothedGrayFrame12);
                 CvInvoke.CvtColor(smoothedGrayFrame12, smoothedGrayFrame12, ColorConversion.Bgr2Gray);
                 // CvInvoke.GaussianBlur(smoothedGrayFrame12, smoothedGrayFrame12, new Size(9, 9), 1, 1);
-                result.SmoothedOryginal = smoothedGrayFrame12;
+                result.SmoothedOryginal = smoothedGrayFrame12;//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
 
                 #region test
@@ -285,13 +285,27 @@ namespace BidaSius
                         new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
 
                     result.Shot = WyliczWartoscPrzestrzeliny(shot.Center, acd.MainTargetDetails);
-                    result.TargetScanWithResult = warped.Clone();//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    if (acd.MainTargetDetails.CameraFlipped)
+                        result.TargetScanWithResult = Rotate180(warped.Clone());//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                    else
+                        result.TargetScanWithResult = warped.Clone();//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
                     break;
                 }
 
                 #endregion
 
             }
+        }
+
+        public static Mat Rotate180(Mat img)
+        {
+            Mat res = new Mat();
+            CvInvoke.GetRotationMatrix2D(new PointF(img.Cols / 2, img.Rows / 2), 180, 1, res);
+
+            Mat result = new Mat();
+            CvInvoke.WarpAffine(img, result, res, img.Size);
+            return result;
         }
 
         public static ProcessFrameResult ProcessFromFile(Mat frame, int firstCannyThresh = 100, int secondCannyThresh = 60, int firstCannyThresh1 = 120, int secondCannyThresh1 = 50, TargetDetails useThisTarget = null)
