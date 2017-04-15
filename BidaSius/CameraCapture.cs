@@ -82,19 +82,19 @@ namespace tarcza
                 int threshtwo1 = 0;
 
 
-                if (this.trackThreshOne.InvokeRequired)
+                if (this.numericUDThreshOne.InvokeRequired)
                 {
-                    threshOne = (int)this.Invoke(new Func<int>(() => trackThreshOne.Value));
-                    threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
-                    threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
-                    threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
+                    threshOne = (int)this.Invoke(new Func<int>(() => (int)numericUDThreshOne.Value));
+                    threstwo = (int)this.Invoke(new Func<int>(() => (int)numericUDthreshTwo.Value));
+                    threshone1 = (int)this.Invoke(new Func<int>(() => (int)numericUDthresh3.Value));
+                    threshtwo1 = (int)this.Invoke(new Func<int>(() => (int)numericUDThresh4.Value));
                 }
                 else
                 {
-                    threshOne = trackThreshOne.Value;
-                    threstwo = trackthreshTwo.Value;
-                    threshone1 = trackthresh3.Value;
-                    threshtwo1 = trackthresh4.Value;
+                    threshOne = (int)numericUDThreshOne.Value;
+                    threstwo = (int)numericUDthreshTwo.Value;
+                    threshone1 = (int)numericUDthresh3.Value;
+                    threshtwo1 = (int)numericUDThresh4.Value;
                 }
 
                 ProcessFrameResult result;
@@ -143,19 +143,19 @@ namespace tarcza
 
 
 
-            if (this.trackThreshOne.InvokeRequired)
+            if (this.numericUDThreshOne.InvokeRequired)
             {
-                threshOne = (int)this.Invoke(new Func<int>(() => trackThreshOne.Value));
-                threstwo = (int)this.Invoke(new Func<int>(() => trackthreshTwo.Value));
-                threshone1 = (int)this.Invoke(new Func<int>(() => trackthresh3.Value));
-                threshtwo1 = (int)this.Invoke(new Func<int>(() => trackthresh4.Value));
+                threshOne = (int)this.Invoke(new Func<int>(() => (int)numericUDThreshOne.Value));
+                threstwo = (int)this.Invoke(new Func<int>(() => (int)numericUDthreshTwo.Value));
+                threshone1 = (int)this.Invoke(new Func<int>(() => (int)numericUDthresh3.Value));
+                threshtwo1 = (int)this.Invoke(new Func<int>(() => (int)numericUDThresh4.Value));
             }
             else
             {
-                threshOne = trackThreshOne.Value;
-                threstwo = trackthreshTwo.Value;
-                threshone1 = trackthresh3.Value;
-                threshtwo1 = trackthresh4.Value;
+                threshOne = (int)numericUDThreshOne.Value;
+                threstwo = (int)numericUDthreshTwo.Value;
+                threshone1 = (int)numericUDthresh3.Value;
+                threshtwo1 = (int)numericUDThresh4.Value;
             }
 
 
@@ -292,10 +292,6 @@ namespace tarcza
             checkBoxCameraOnTop.Checked = td.CameraOnTop;
             checkBoxIgnoreWhiteShots.Checked = td.IgnoreWhiteShots;
 
-            trackThreshOne_ValueChanged(null, null);
-            trackthresh3_ValueChanged(null, null);
-            trackthresh4_ValueChanged(null, null);
-            trackthreshTwo_ValueChanged(null, null);
         }
         #endregion settings
 
@@ -591,30 +587,7 @@ namespace tarcza
 
         }
 
-        private void trackThreshOne_ValueChanged(object sender, EventArgs e)
-        {
-            label12.Text = trackThreshOne.Value.ToString();
-            threshhhhh = trackThreshOne.Value;
-            //   ProcessFrame(null, null);
-        }
-
-        private void trackthreshTwo_ValueChanged(object sender, EventArgs e)
-        {
-            label11.Text = trackthreshTwo.Value.ToString();
-            //   ProcessFrame(null, null);
-        }
-
-        private void trackthresh4_ValueChanged(object sender, EventArgs e)
-        {
-            label10.Text = trackthresh4.Value.ToString();
-            //     ProcessFrame(null, null);
-        }
-
-        private void trackthresh3_ValueChanged(object sender, EventArgs e)
-        {
-            label9.Text = trackthresh3.Value.ToString();
-            //     ProcessFrame(null, null);
-        }
+       
 
         private void setting_ValueChanged(object sender, EventArgs e)
         {

@@ -32,6 +32,10 @@ namespace tarcza
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.numericUDThreshOne = new System.Windows.Forms.NumericUpDown();
+            this.numericUDthreshTwo = new System.Windows.Forms.NumericUpDown();
+            this.numericUDthresh3 = new System.Windows.Forms.NumericUpDown();
+            this.numericUDThresh4 = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.captureButton = new System.Windows.Forms.Button();
@@ -39,10 +43,6 @@ namespace tarcza
             this.checkBoxIgnoreWhiteShots = new System.Windows.Forms.CheckBox();
             this.comboGame = new System.Windows.Forms.ComboBox();
             this.buttonPauseAndSelect = new System.Windows.Forms.Button();
-            this.trackThreshOne = new System.Windows.Forms.TrackBar();
-            this.trackthreshTwo = new System.Windows.Forms.TrackBar();
-            this.trackthresh4 = new System.Windows.Forms.TrackBar();
-            this.trackthresh3 = new System.Windows.Forms.TrackBar();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -79,11 +79,11 @@ namespace tarcza
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDThreshOne)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDthreshTwo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDthresh3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDThresh4)).BeginInit();
             this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackThreshOne)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthreshTwo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthresh4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthresh3)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.File.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -119,15 +119,15 @@ namespace tarcza
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.numericUDThreshOne);
+            this.tabPage1.Controls.Add(this.numericUDthreshTwo);
+            this.tabPage1.Controls.Add(this.numericUDthresh3);
+            this.tabPage1.Controls.Add(this.numericUDThresh4);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.captureButton);
             this.tabPage1.Controls.Add(this.groupBox4);
             this.tabPage1.Controls.Add(this.buttonPauseAndSelect);
-            this.tabPage1.Controls.Add(this.trackThreshOne);
-            this.tabPage1.Controls.Add(this.trackthreshTwo);
-            this.tabPage1.Controls.Add(this.trackthresh4);
-            this.tabPage1.Controls.Add(this.trackthresh3);
             this.tabPage1.Controls.Add(this.label12);
             this.tabPage1.Controls.Add(this.label11);
             this.tabPage1.Controls.Add(this.label10);
@@ -144,9 +144,97 @@ namespace tarcza
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // numericUDThreshOne
+            // 
+            this.numericUDThreshOne.Location = new System.Drawing.Point(314, 11);
+            this.numericUDThreshOne.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUDThreshOne.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUDThreshOne.Name = "numericUDThreshOne";
+            this.numericUDThreshOne.Size = new System.Drawing.Size(50, 20);
+            this.numericUDThreshOne.TabIndex = 54;
+            this.numericUDThreshOne.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // numericUDthreshTwo
+            // 
+            this.numericUDthreshTwo.Location = new System.Drawing.Point(314, 37);
+            this.numericUDthreshTwo.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUDthreshTwo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUDthreshTwo.Name = "numericUDthreshTwo";
+            this.numericUDthreshTwo.Size = new System.Drawing.Size(50, 20);
+            this.numericUDthreshTwo.TabIndex = 53;
+            this.numericUDthreshTwo.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // numericUDthresh3
+            // 
+            this.numericUDthresh3.Location = new System.Drawing.Point(314, 63);
+            this.numericUDthresh3.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUDthresh3.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUDthresh3.Name = "numericUDthresh3";
+            this.numericUDthresh3.Size = new System.Drawing.Size(50, 20);
+            this.numericUDthresh3.TabIndex = 52;
+            this.numericUDthresh3.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // numericUDThresh4
+            // 
+            this.numericUDThresh4.Location = new System.Drawing.Point(314, 89);
+            this.numericUDThresh4.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericUDThresh4.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUDThresh4.Name = "numericUDThresh4";
+            this.numericUDThresh4.Size = new System.Drawing.Size(50, 20);
+            this.numericUDThresh4.TabIndex = 51;
+            this.numericUDThresh4.Value = new decimal(new int[] {
+            18,
+            0,
+            0,
+            0});
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(489, 138);
+            this.button2.Location = new System.Drawing.Point(481, 191);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 50;
@@ -156,7 +244,7 @@ namespace tarcza
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(489, 88);
+            this.button1.Location = new System.Drawing.Point(481, 165);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 49;
@@ -220,50 +308,10 @@ namespace tarcza
             this.buttonPauseAndSelect.UseVisualStyleBackColor = true;
             this.buttonPauseAndSelect.Click += new System.EventHandler(this.buttonPauseAndSelect_Click_1);
             // 
-            // trackThreshOne
-            // 
-            this.trackThreshOne.Location = new System.Drawing.Point(314, 11);
-            this.trackThreshOne.Maximum = 300;
-            this.trackThreshOne.Name = "trackThreshOne";
-            this.trackThreshOne.Size = new System.Drawing.Size(172, 45);
-            this.trackThreshOne.TabIndex = 38;
-            this.trackThreshOne.Value = 100;
-            this.trackThreshOne.ValueChanged += new System.EventHandler(this.trackThreshOne_ValueChanged);
-            // 
-            // trackthreshTwo
-            // 
-            this.trackthreshTwo.Location = new System.Drawing.Point(314, 66);
-            this.trackthreshTwo.Maximum = 300;
-            this.trackthreshTwo.Name = "trackthreshTwo";
-            this.trackthreshTwo.Size = new System.Drawing.Size(172, 45);
-            this.trackthreshTwo.TabIndex = 40;
-            this.trackthreshTwo.Value = 60;
-            this.trackthreshTwo.ValueChanged += new System.EventHandler(this.trackthreshTwo_ValueChanged);
-            // 
-            // trackthresh4
-            // 
-            this.trackthresh4.Location = new System.Drawing.Point(314, 171);
-            this.trackthresh4.Maximum = 300;
-            this.trackthresh4.Name = "trackthresh4";
-            this.trackthresh4.Size = new System.Drawing.Size(172, 45);
-            this.trackthresh4.TabIndex = 41;
-            this.trackthresh4.Value = 18;
-            this.trackthresh4.ValueChanged += new System.EventHandler(this.trackthresh4_ValueChanged);
-            // 
-            // trackthresh3
-            // 
-            this.trackthresh3.Location = new System.Drawing.Point(314, 120);
-            this.trackthresh3.Maximum = 300;
-            this.trackthresh3.Name = "trackthresh3";
-            this.trackthresh3.Size = new System.Drawing.Size(172, 45);
-            this.trackthresh3.TabIndex = 39;
-            this.trackthresh3.Value = 30;
-            this.trackthresh3.ValueChanged += new System.EventHandler(this.trackthresh3_ValueChanged);
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(492, 11);
+            this.label12.Location = new System.Drawing.Point(384, 13);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(41, 13);
             this.label12.TabIndex = 42;
@@ -272,7 +320,7 @@ namespace tarcza
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(492, 66);
+            this.label11.Location = new System.Drawing.Point(384, 39);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(41, 13);
             this.label11.TabIndex = 44;
@@ -281,7 +329,7 @@ namespace tarcza
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(492, 171);
+            this.label10.Location = new System.Drawing.Point(384, 91);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(41, 13);
             this.label10.TabIndex = 45;
@@ -290,7 +338,7 @@ namespace tarcza
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(492, 120);
+            this.label9.Location = new System.Drawing.Point(384, 65);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(35, 13);
             this.label9.TabIndex = 43;
@@ -655,12 +703,12 @@ namespace tarcza
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDThreshOne)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDthreshTwo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDthresh3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUDThresh4)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackThreshOne)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthreshTwo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthresh4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackthresh3)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.File.ResumeLayout(false);
@@ -713,13 +761,8 @@ namespace tarcza
         private System.Windows.Forms.NumericUpDown textBoxBL;
         private System.Windows.Forms.GroupBox File;
         private System.Windows.Forms.Label lblCamNo;
-        private System.Windows.Forms.TrackBar trackThreshOne;
-        private System.Windows.Forms.TrackBar trackthreshTwo;
-        private System.Windows.Forms.TrackBar trackthresh4;
-        private System.Windows.Forms.TrackBar trackthresh3;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button buttonTestCom;
@@ -734,6 +777,11 @@ namespace tarcza
         private System.Windows.Forms.CheckBox checkBoxCameraFlipped;
         private System.Windows.Forms.CheckBox checkBoxCameraOnTop;
         private System.Windows.Forms.CheckBox checkBoxIgnoreWhiteShots;
+        private System.Windows.Forms.NumericUpDown numericUDThresh4;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.NumericUpDown numericUDthresh3;
+        private System.Windows.Forms.NumericUpDown numericUDThreshOne;
+        private System.Windows.Forms.NumericUpDown numericUDthreshTwo;
     }
 }
 

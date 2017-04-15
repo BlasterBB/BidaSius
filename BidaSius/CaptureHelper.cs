@@ -262,7 +262,9 @@ namespace BidaSius
                 #region rozpoznawanie strzału
 
                 int czteryIpolmmRInt = Convert.ToInt32(FourNHalfR(pix));
-                int zapasSize = 5;
+                int zapasSizeMax = 5;
+                int zapasSizeMin = 1;
+
 
                 CircleF[] przestrzeliny = CvInvoke.HoughCircles(smoothedGrayFrame12,
                     HoughType.Gradient,
@@ -270,8 +272,8 @@ namespace BidaSius
                     400,
                     acd.firstCannyThresh1,
                     acd.secondCannyThresh1,
-                    czteryIpolmmRInt - zapasSize,
-                    czteryIpolmmRInt + zapasSize);
+                    czteryIpolmmRInt - zapasSizeMin,
+                    czteryIpolmmRInt + zapasSizeMax);
 
                 result.Warped = warped.Clone();//$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
@@ -279,9 +281,9 @@ namespace BidaSius
                 {
                     CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt, new Bgr(Color.Blue).MCvScalar, 1,
                         LineType.AntiAlias, 0);
-                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt - zapasSize,
+                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt - zapasSizeMin,
                         new Bgr(Color.BlueViolet).MCvScalar, 1, LineType.AntiAlias, 0);
-                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt + zapasSize,
+                    CvInvoke.Circle(warped, Point.Round(shot.Center), czteryIpolmmRInt + zapasSizeMax,
                         new Bgr(Color.Chartreuse).MCvScalar, 1, LineType.AntiAlias, 0);
 
                     result.Shot = WyliczWartoscPrzestrzeliny(shot.Center, acd.MainTargetDetails);
