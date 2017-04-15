@@ -32,6 +32,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.TargetIB = new Emgu.CV.UI.ImageBox();
             this.splitContainerData = new System.Windows.Forms.SplitContainer();
+            this.buttonRepairLast = new System.Windows.Forms.Button();
             this.chckShowAll = new System.Windows.Forms.CheckBox();
             this.buttonClean = new System.Windows.Forms.Button();
             this.buttonRemLast = new System.Windows.Forms.Button();
@@ -40,7 +41,8 @@
             this.labSeries = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.flPanelSeries = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonRepairLast = new System.Windows.Forms.Button();
+            this.numericShotsInSeries = new System.Windows.Forms.NumericUpDown();
+            this.labelShotsInSeries = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -50,6 +52,7 @@
             this.splitContainerData.Panel1.SuspendLayout();
             this.splitContainerData.Panel2.SuspendLayout();
             this.splitContainerData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericShotsInSeries)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -88,6 +91,8 @@
             // 
             // splitContainerData.Panel1
             // 
+            this.splitContainerData.Panel1.Controls.Add(this.labelShotsInSeries);
+            this.splitContainerData.Panel1.Controls.Add(this.numericShotsInSeries);
             this.splitContainerData.Panel1.Controls.Add(this.buttonRepairLast);
             this.splitContainerData.Panel1.Controls.Add(this.chckShowAll);
             this.splitContainerData.Panel1.Controls.Add(this.buttonClean);
@@ -103,6 +108,16 @@
             this.splitContainerData.Size = new System.Drawing.Size(783, 811);
             this.splitContainerData.SplitterDistance = 37;
             this.splitContainerData.TabIndex = 9;
+            // 
+            // buttonRepairLast
+            // 
+            this.buttonRepairLast.Location = new System.Drawing.Point(90, 7);
+            this.buttonRepairLast.Name = "buttonRepairLast";
+            this.buttonRepairLast.Size = new System.Drawing.Size(97, 23);
+            this.buttonRepairLast.TabIndex = 4;
+            this.buttonRepairLast.Text = "Popraw ostatni";
+            this.buttonRepairLast.UseVisualStyleBackColor = true;
+            this.buttonRepairLast.Click += new System.EventHandler(this.buttonRepairLast_Click);
             // 
             // chckShowAll
             // 
@@ -186,15 +201,37 @@
             this.flPanelSeries.TabIndex = 0;
             this.flPanelSeries.WrapContents = false;
             // 
-            // buttonRepairLast
+            // numericShotsInSeries
             // 
-            this.buttonRepairLast.Location = new System.Drawing.Point(90, 7);
-            this.buttonRepairLast.Name = "buttonRepairLast";
-            this.buttonRepairLast.Size = new System.Drawing.Size(97, 23);
-            this.buttonRepairLast.TabIndex = 4;
-            this.buttonRepairLast.Text = "Popraw ostatni";
-            this.buttonRepairLast.UseVisualStyleBackColor = true;
-            this.buttonRepairLast.Click += new System.EventHandler(this.buttonRepairLast_Click);
+            this.numericShotsInSeries.Location = new System.Drawing.Point(468, 10);
+            this.numericShotsInSeries.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericShotsInSeries.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericShotsInSeries.Name = "numericShotsInSeries";
+            this.numericShotsInSeries.Size = new System.Drawing.Size(48, 20);
+            this.numericShotsInSeries.TabIndex = 5;
+            this.numericShotsInSeries.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericShotsInSeries.ValueChanged += new System.EventHandler(this.numericShotsInSeries_ValueChanged);
+            // 
+            // labelShotsInSeries
+            // 
+            this.labelShotsInSeries.AutoSize = true;
+            this.labelShotsInSeries.Location = new System.Drawing.Point(370, 13);
+            this.labelShotsInSeries.Name = "labelShotsInSeries";
+            this.labelShotsInSeries.Size = new System.Drawing.Size(92, 13);
+            this.labelShotsInSeries.TabIndex = 6;
+            this.labelShotsInSeries.Text = "No Shots in series";
             // 
             // MainForm
             // 
@@ -215,6 +252,7 @@
             this.splitContainerData.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerData)).EndInit();
             this.splitContainerData.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericShotsInSeries)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -233,5 +271,7 @@
         private System.Windows.Forms.Label labSeries;
         private System.Windows.Forms.CheckBox chckShowAll;
         private System.Windows.Forms.Button buttonRepairLast;
+        private System.Windows.Forms.Label labelShotsInSeries;
+        private System.Windows.Forms.NumericUpDown numericShotsInSeries;
     }
 }

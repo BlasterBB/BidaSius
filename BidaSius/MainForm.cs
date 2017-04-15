@@ -14,6 +14,7 @@ namespace BidaSius
     {
         public List<Shot> Shots = new List<Shot>();
         private TargetDetails bidaSiusSettings;
+        int strzNaSerie = 10;
 
         public MainForm(TargetDetails settings)
         {
@@ -73,7 +74,7 @@ namespace BidaSius
             if (flPanelSeries.Controls.Count > 0)
                 flPanelSeries.ScrollControlIntoView(flPanelSeries.Controls[flPanelSeries.Controls.Count - 1]);
         }
-
+       
         private void DrawAllTarget()
         {
             TargetIB.FunctionalMode = Emgu.CV.UI.ImageBox.FunctionalModeOption.PanAndZoom;
@@ -81,10 +82,10 @@ namespace BidaSius
                 TargetIB.Image = TargetDrawHelper.DrawTarget(Shots);
             else
             {
-                var sss = (Shots.Count() / 10) * 10;
+                var sss = (Shots.Count() / strzNaSerie) * 10;
                 var skip = sss;
-                if (Shots.Count() % 10 == 0)
-                    skip = sss - 10;
+                if (Shots.Count() % strzNaSerie == 0)
+                    skip = sss - strzNaSerie;
 
                 var serie = Shots.Skip(Math.Max(0, skip)).ToList();
                 TargetIB.Image = TargetDrawHelper.DrawTarget(serie);
@@ -94,15 +95,15 @@ namespace BidaSius
 
         private void AddSeriesRows()
         {
-            int series = Shots.Count() / 10;
-            if (series * 10 < Shots.Count())
+            int series = Shots.Count() / strzNaSerie;
+            if (series * strzNaSerie < Shots.Count())
                 series++;
             labSeries.Text = string.Empty;
 
 
             for (int i = 0; i < series; i++)
             {
-                var serie = Shots.Skip(i * 10).Take(10).ToList();
+                var serie = Shots.Skip(i * strzNaSerie).Take(strzNaSerie).ToList();
                 serie.ForEach(w => w.No = 1 + Shots.FindIndex(f => f.Time == w.Time));
 
                 if (flPanelSeries.Controls.Count > i)
@@ -215,6 +216,12 @@ namespace BidaSius
                 last.Update(newShot);
                 RefreshTarget();
             }
+        }
+
+        private void numericShotsInSeries_ValueChanged(object sender, EventArgs e)
+        {
+            strzNaSerie = (int)numericShotsInSeries.Value;
+            RefreshTarget();
         }
     }
 }

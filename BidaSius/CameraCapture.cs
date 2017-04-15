@@ -267,6 +267,7 @@ namespace tarcza
             SaveSettings(td);
             BidaSiusSettings = td;
             FillSettingsToGui(td);
+            comboGame.SelectedIndex = 1;
 
         }
 
