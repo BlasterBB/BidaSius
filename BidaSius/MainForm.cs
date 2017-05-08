@@ -16,6 +16,11 @@ namespace BidaSius
         private TargetDetails bidaSiusSettings;
         int strzNaSerie = 10;
 
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+
+
         public MainForm(TargetDetails settings)
         {
             InitializeComponent();
@@ -82,7 +87,7 @@ namespace BidaSius
                 TargetIB.Image = TargetDrawHelper.DrawTarget(Shots);
             else
             {
-                var sss = (Shots.Count() / strzNaSerie) * 10;
+                var sss = (Shots.Count() / strzNaSerie) * strzNaSerie;
                 var skip = sss;
                 if (Shots.Count() % strzNaSerie == 0)
                     skip = sss - strzNaSerie;
@@ -222,6 +227,25 @@ namespace BidaSius
         {
             strzNaSerie = (int)numericShotsInSeries.Value;
             RefreshTarget();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            seconds++;
+            if (seconds > 59)
+            {
+                minutes++;
+                seconds = 0;
+            }
+            if (minutes > 59)
+            {
+                hours++;
+                minutes = 0;
+            }
+
+            labelSeconds.Text = seconds.ToString("00");
+            labelMinutes.Text = minutes.ToString("00");
+            labelHours.Text = hours.ToString("00");
         }
     }
 }

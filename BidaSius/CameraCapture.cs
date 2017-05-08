@@ -17,6 +17,7 @@ using System.Security.Cryptography;
 using BidaSius;
 using Emgu.CV.Cuda;
 using Stream = System.IO.Stream;
+using System.Speech.Synthesis;
 
 namespace tarcza
 {
@@ -690,9 +691,27 @@ namespace tarcza
         }
 
 
+
         #endregion
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // Initialize a new instance of the SpeechSynthesizer.
+            SpeechSynthesizer synth = new SpeechSynthesizer();
 
+            // Configure the audio output. 
+            synth.SetOutputToDefaultAudioDevice();
+
+            synth.SelectVoiceByHints(VoiceGender.Male, VoiceAge.Adult); // to change VoiceGender and VoiceAge check out those links below
+            synth.Volume = 100;  // (0 - 100)
+            synth.Rate = -5;     // (-10 - 10)
+
+            synth.Speak("Start stop");
+            // Speak a string.
+            synth.Speak("10,9");
+
+          
+        }
     }
 
 

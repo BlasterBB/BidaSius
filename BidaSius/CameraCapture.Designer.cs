@@ -77,6 +77,7 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
+            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUDThreshOne)).BeginInit();
@@ -119,6 +120,7 @@ namespace tarcza
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.numericUDThreshOne);
             this.tabPage1.Controls.Add(this.numericUDthreshTwo);
             this.tabPage1.Controls.Add(this.numericUDthresh3);
@@ -689,6 +691,16 @@ namespace tarcza
             this.textBoxBL.TabIndex = 15;
             this.textBoxBL.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(350, 145);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 55;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // CameraCapture
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -782,6 +794,7 @@ namespace tarcza
         private System.Windows.Forms.NumericUpDown numericUDthresh3;
         private System.Windows.Forms.NumericUpDown numericUDThreshOne;
         private System.Windows.Forms.NumericUpDown numericUDthreshTwo;
+        private System.Windows.Forms.Button button3;
     }
 }
 
