@@ -28,6 +28,7 @@ It can use any black paper roll even packing paper - but best one is kruger... <
 
 About processing library ... i completly dont know  anything about image procesing .... so it was all done by trial and error method<br>
 
+For now it is only for Air Pistol due to lack of time and mostly because i have cheap camera and dont know how to use emgucv :) 
 
 BidaSius looks like this :<br>
 Screen<br>
