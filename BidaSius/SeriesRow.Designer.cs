@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridViewSerie = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.labSerieTotal = new System.Windows.Forms.Label();
-            this.imageBox1 = new Emgu.CV.UI.ImageBox();
             this.noDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.singleValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.shotBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.labSerieTotal = new System.Windows.Forms.Label();
+            this.imageBox1 = new Emgu.CV.UI.ImageBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSerie)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.shotBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewSerie
@@ -49,6 +49,7 @@
             this.dataGridViewSerie.AllowUserToResizeColumns = false;
             this.dataGridViewSerie.AllowUserToResizeRows = false;
             this.dataGridViewSerie.AutoGenerateColumns = false;
+            this.dataGridViewSerie.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewSerie.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridViewSerie.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridViewSerie.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -65,13 +66,39 @@
             this.dataGridViewSerie.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dataGridViewSerie.RowHeadersVisible = false;
             this.dataGridViewSerie.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewSerie.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSerie.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridViewSerie.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewSerie.ShowCellErrors = false;
             this.dataGridViewSerie.ShowCellToolTips = false;
             this.dataGridViewSerie.ShowEditingIcon = false;
             this.dataGridViewSerie.Size = new System.Drawing.Size(256, 241);
             this.dataGridViewSerie.TabIndex = 0;
+            // 
+            // noDataGridViewTextBoxColumn
+            // 
+            this.noDataGridViewTextBoxColumn.DataPropertyName = "No";
+            this.noDataGridViewTextBoxColumn.HeaderText = "No";
+            this.noDataGridViewTextBoxColumn.Name = "noDataGridViewTextBoxColumn";
+            this.noDataGridViewTextBoxColumn.ReadOnly = true;
+            this.noDataGridViewTextBoxColumn.Width = 50;
+            // 
+            // singleValueDataGridViewTextBoxColumn
+            // 
+            this.singleValueDataGridViewTextBoxColumn.DataPropertyName = "SingleValue";
+            this.singleValueDataGridViewTextBoxColumn.HeaderText = "SingleValue";
+            this.singleValueDataGridViewTextBoxColumn.Name = "singleValueDataGridViewTextBoxColumn";
+            this.singleValueDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // valueDataGridViewTextBoxColumn
+            // 
+            this.valueDataGridViewTextBoxColumn.DataPropertyName = "Value";
+            this.valueDataGridViewTextBoxColumn.HeaderText = "Value";
+            this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
+            this.valueDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // shotBindingSource
+            // 
+            this.shotBindingSource.DataSource = typeof(BidaSius.Shot);
             // 
             // label1
             // 
@@ -101,32 +128,6 @@
             this.imageBox1.TabIndex = 2;
             this.imageBox1.TabStop = false;
             // 
-            // noDataGridViewTextBoxColumn
-            // 
-            this.noDataGridViewTextBoxColumn.DataPropertyName = "No";
-            this.noDataGridViewTextBoxColumn.HeaderText = "No";
-            this.noDataGridViewTextBoxColumn.Name = "noDataGridViewTextBoxColumn";
-            this.noDataGridViewTextBoxColumn.ReadOnly = true;
-            this.noDataGridViewTextBoxColumn.Width = 50;
-            // 
-            // singleValueDataGridViewTextBoxColumn
-            // 
-            this.singleValueDataGridViewTextBoxColumn.DataPropertyName = "SingleValue";
-            this.singleValueDataGridViewTextBoxColumn.HeaderText = "SingleValue";
-            this.singleValueDataGridViewTextBoxColumn.Name = "singleValueDataGridViewTextBoxColumn";
-            this.singleValueDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // valueDataGridViewTextBoxColumn
-            // 
-            this.valueDataGridViewTextBoxColumn.DataPropertyName = "Value";
-            this.valueDataGridViewTextBoxColumn.HeaderText = "Value";
-            this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
-            this.valueDataGridViewTextBoxColumn.ReadOnly = true;
-            // 
-            // shotBindingSource
-            // 
-            this.shotBindingSource.DataSource = typeof(Shot);
-            // 
             // SeriesRow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -138,8 +139,8 @@
             this.Name = "SeriesRow";
             this.Size = new System.Drawing.Size(549, 272);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSerie)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.shotBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

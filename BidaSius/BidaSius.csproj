@@ -60,6 +60,12 @@
       <DependentUpon>CameraCapture.cs</DependentUpon>
     </Compile>
     <Compile Include="CaptureHelper.cs" />
+    <Compile Include="Final.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Final.Designer.cs">
+      <DependentUpon>Final.cs</DependentUpon>
+    </Compile>
     <Compile Include="FoundRectangles.cs" />
     <Compile Include="image.cs">
       <SubType>Form</SubType>
@@ -103,6 +109,9 @@
     <Compile Include="TargetDrawHelper.cs" />
     <EmbeddedResource Include="CameraCapture.resx">
       <DependentUpon>CameraCapture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Final.resx">
+      <DependentUpon>Final.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="image.resx">
       <DependentUpon>image.cs</DependentUpon>

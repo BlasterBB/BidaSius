@@ -32,6 +32,7 @@ namespace tarcza
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
             this.numericUDThreshOne = new System.Windows.Forms.NumericUpDown();
             this.numericUDthreshTwo = new System.Windows.Forms.NumericUpDown();
             this.numericUDthresh3 = new System.Windows.Forms.NumericUpDown();
@@ -77,7 +78,6 @@ namespace tarcza
             this.textBoxBR = new System.Windows.Forms.NumericUpDown();
             this.textBoxTLX = new System.Windows.Forms.NumericUpDown();
             this.textBoxBL = new System.Windows.Forms.NumericUpDown();
-            this.button3 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUDThreshOne)).BeginInit();
@@ -145,6 +145,16 @@ namespace tarcza
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(481, 136);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 55;
+            this.button3.Text = "synth test";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // numericUDThreshOne
             // 
@@ -240,7 +250,7 @@ namespace tarcza
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 50;
-            this.button2.Text = "button2";
+            this.button2.Text = "test";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -250,7 +260,7 @@ namespace tarcza
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 49;
-            this.button1.Text = "button1";
+            this.button1.Text = "test";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -273,7 +283,7 @@ namespace tarcza
             this.groupBox4.Size = new System.Drawing.Size(161, 75);
             this.groupBox4.TabIndex = 47;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Trening";
+            this.groupBox4.Text = "Training type";
             this.groupBox4.Enter += new System.EventHandler(this.groupBox4_Enter);
             // 
             // checkBoxIgnoreWhiteShots
@@ -293,7 +303,8 @@ namespace tarcza
             this.comboGame.Items.AddRange(new object[] {
             "naked",
             "normal",
-            "TenSeries"});
+            "TenSeries",
+            "Final"});
             this.comboGame.Location = new System.Drawing.Point(19, 19);
             this.comboGame.Name = "comboGame";
             this.comboGame.Size = new System.Drawing.Size(121, 21);
@@ -306,7 +317,7 @@ namespace tarcza
             this.buttonPauseAndSelect.Name = "buttonPauseAndSelect";
             this.buttonPauseAndSelect.Size = new System.Drawing.Size(100, 61);
             this.buttonPauseAndSelect.TabIndex = 46;
-            this.buttonPauseAndSelect.Text = "Pauzuj Poka¿ Zapisz";
+            this.buttonPauseAndSelect.Text = "Pause Show Save";
             this.buttonPauseAndSelect.UseVisualStyleBackColor = true;
             this.buttonPauseAndSelect.Click += new System.EventHandler(this.buttonPauseAndSelect_Click_1);
             // 
@@ -690,16 +701,6 @@ namespace tarcza
             this.textBoxBL.Size = new System.Drawing.Size(50, 20);
             this.textBoxBL.TabIndex = 15;
             this.textBoxBL.ValueChanged += new System.EventHandler(this.setting_ValueChanged);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(350, 145);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 55;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // CameraCapture
             // 

@@ -27,6 +27,7 @@ namespace tarcza
 
         public Form MainF { get; set; }
         public Form NakedF { get; set; }
+        public Form FinalForm { get; set; }
         public Form TenSeriesF { get; set; }
         private Capture _capture = null;
         private bool _captureInProgress;
@@ -393,8 +394,15 @@ namespace tarcza
                 MainF = new MainForm(BidaSiusSettings);
               //  MainF.Parent = this;
             }
+            
             MainForm mf = (MainForm)MainF;
-            if (!mf.IsAccessible)
+            if (mf.IsDisposed)
+            {
+                CaptureButtonClick(null, null);
+                return;
+            }
+
+            if (!mf.Visible)
                 mf.Show();
 
             if (mf != null && result.Shot != null)
@@ -416,6 +424,47 @@ namespace tarcza
 
                 ScrollPaper();
                 mf.RefreshTarget();
+
+                if (result.TargetScanWithResult != null)
+                {
+                    using (Mat mm = result.TargetScanWithResult.Clone())
+                    {
+                        nw.setImage(mm.Bitmap);
+                    }
+                }
+
+            }
+        }
+
+        private void PlayFinal(ProcessFrameResult result)
+        {
+            if (FinalForm == null)
+            {
+                FinalForm = new Final(BidaSiusSettings);
+            }
+            Final ff = (Final)FinalForm;
+            if (!ff.IsAccessible)
+                ff.Show();
+
+            if (ff != null && result.Shot != null)
+            {
+                var lastshot = ff.Shots.LastOrDefault();
+                alreadyManual = false;
+                useManualShotPositiong = false;
+                buttonPauseAndSelect.Enabled = true;
+                if (lastshot != null && (result.Shot.Time - lastshot.Time) < (TimeSpan.TicksPerSecond * 4))
+                    return;
+                ff.Shots.Add(result.Shot);
+
+
+                var ticks = DateTime.Now.Ticks.ToString();
+                //result.Shot.TargetScanWithResultFileName = ticks + ".jpg";
+                //result.Shot.WarpedFileName = ticks + "_oryg.jpg";
+                //result.TargetScanWithResult?.Save(BidaSiusSettings.ImagesFolderPath + result.Shot.TargetScanWithResultFileName);
+                //result.Warped?.Save(BidaSiusSettings.ImagesFolderPath + result.Shot.WarpedFileName);
+
+                ScrollPaper();
+                ff.RefreshTarget();
 
                 if (result.TargetScanWithResult != null)
                 {
@@ -518,8 +567,13 @@ namespace tarcza
                 case "TenSeries":
                     PlayTenSeries(result);
                     break;
+                case "Final":
+                    PlayFinal(result);
+                    break;
             }
         }
+
+      
 
         private void ReleaseData()
         {
